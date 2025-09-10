@@ -52,4 +52,5 @@ logs/
 .mtj.tmp/
 hs_err_pid*
 replay_pid*
-activityEnsemblePlatform/target/
+activityEnsemblePlatform/target/classes/
+activityEnsemblePlatform/target/*
