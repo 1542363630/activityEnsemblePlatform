@@ -117,15 +117,6 @@ public interface ArticleClassificationMapper extends BaseMapper<ArticleClassific
     )
     boolean updateActivity(ArticleSimpleData articleSimpleData);
 
-    //更改train_resource;
-    @Select("UPDATE `train_resource` " +
-            "SET " +
-                "`project_id`=COALESCE(#{projectId},`project_id`)," +
-                "`period_id`=COALESCE(#{periodId},`period_id`) " +
-            "WHERE `id`=#{id};" +
-            "SELECT ROW_COUNT()>0;"
-    )
-    boolean updateTrainResource(ArticleSimpleData articleSimpleData);
 
     /*
     * 查询

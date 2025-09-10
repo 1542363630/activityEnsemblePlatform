@@ -12,10 +12,6 @@
     </delete>
     
     <update id="updateAllCausedByProjectChange">
-        UPDATE `train_resource` SET `status`=1,`project_id`=-1,`period_id`=-1 WHERE `project_id` IN
-        <foreach collection="idList" item="id" open="(" separator="," close=")">
-            #{id}
-        </foreach>;
 
         UPDATE `achievement` SET `status`=2,`project_id`=-1,`period_id`=-1 WHERE `project_id` IN
         <foreach collection="idList" item="id" open="(" separator="," close=")">
@@ -29,13 +25,11 @@
     </update>
 
     <update id="updateOneCausedByProjectChange">
-        UPDATE `train_resource` SET `status`=1,`project_id`=-1,`period_id`=-1 WHERE `project_id`=#{id};
         UPDATE `achievement` SET `status`=2,`project_id`=-1,`period_id`=-1 WHERE `project_id`=#{id};
         UPDATE `activity` SET `status`=1,`project_id`=-1 WHERE `project_id`=#{id};
     </update>
 
     <update id="updateOneCausedByPeriodChange">
-        UPDATE `train_resource` SET `period_id`=0 WHERE `period_id`=#{id};
         UPDATE `achievement` SET `period_id`=0 WHERE `period_id`=#{id};
     </update>
 

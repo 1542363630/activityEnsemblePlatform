@@ -1,0 +1,1500 @@
+openapi: 3.0.3
+info:
+  title: Activity Ensemble Platform API
+  description: 社团活动管理平台API接口文档
+  version: 1.0.0
+  contact:
+    name: API Support
+    email: support@example.com
+
+servers:
+  - url: http://127.0.0.1:8080
+    description: 本地开发服务器
+  - url: http://47.113.194.64:8080
+    description: 生产服务器
+
+paths:
+  # 用户相关接口
+  /user/login:
+    post:
+      summary: 用户登录
+      tags:
+        - 用户管理
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SDULoginData'
+      responses:
+        '200':
+          description: 登录成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+        '401':
+          description: 登录失败
+
+  /user/info:
+    get:
+      summary: 获取个人信息
+      tags:
+        - 用户管理
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 成功获取用户信息
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /user/update/info:
+    post:
+      summary: 更新用户信息
+      tags:
+        - 用户管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /user/update/avatar:
+    post:
+      summary: 更新用户头像(web端)
+      tags:
+        - 用户管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                avatar:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /user/update/avatar/wx:
+    post:
+      summary: 更新用户头像(小程序端)
+      tags:
+        - 用户管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                url:
+                  type: string
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /user/refresh-token:
+    get:
+      summary: 刷新token
+      tags:
+        - 用户管理
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: 刷新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 活动相关接口
+  /tang-org/admin/post/activity:
+    post:
+      summary: 发布活动
+      tags:
+        - 活动管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticlePostDataActivityInfo'
+      responses:
+        '200':
+          description: 发布成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /user/tang-org/activity:
+    post:
+      summary: 获取个人活动列表(分页)
+      tags:
+        - 活动管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                num:
+                  type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/activity/preview:
+    get:
+      summary: 获取活动预览内容
+      tags:
+        - 活动管理
+      parameters:
+        - name: num
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/activity/view:
+    post:
+      summary: 按版块获取活动列表(分项目)
+      tags:
+        - 活动管理
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sectionId:
+                  type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/activity/constrained:
+    post:
+      summary: 活动筛选（按关键词，是否进行中，项目类型进行筛选）
+      tags:
+        - 活动管理
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ActivitySearchData'
+      responses:
+        '200':
+          description: 筛选成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/activity:
+    get:
+      summary: 根据id查看活动
+      tags:
+        - 活动管理
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: activityId
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/activity/apply:
+    post:
+      summary: 申请参加活动
+      tags:
+        - 活动管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                activityId:
+                  type: integer
+      responses:
+        '200':
+          description: 申请成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 历史成就相关接口
+  /tang-org/admin/post/achieve:
+    post:
+      summary: 发布历史成就
+      tags:
+        - 历史成就管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticlePostDataAchievement'
+      responses:
+        '200':
+          description: 发布成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/achieve:
+    get:
+      summary: 根据id获取未删除历史成就
+      tags:
+        - 历史成就管理
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/achieve/project-period:
+    post:
+      summary: 根据"项目-时间线"分页获取未删除历史成就
+      tags:
+        - 历史成就管理
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticlePageData'
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/achieve/search:
+    post:
+      summary: 查询成就
+      tags:
+        - 历史成就管理
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AchieveSearchData'
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/achieve/display:
+    post:
+      summary: 显示历史成就
+      tags:
+        - 历史成就管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idList:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: 操作成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/achieve/non-display:
+    post:
+      summary: 隐藏历史成就
+      tags:
+        - 历史成就管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                idList:
+                  type: array
+                  items:
+                    type: integer
+      responses:
+        '200':
+          description: 操作成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 新闻相关接口
+  /tang-org/admin/post/news:
+    post:
+      summary: 发布新闻
+      tags:
+        - 新闻管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticlePostDataNews'
+      responses:
+        '200':
+          description: 发布成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /news/all:
+    post:
+      summary: 获取所有新闻
+      tags:
+        - 新闻管理
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                page:
+                  type: integer
+                num:
+                  type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /news/keyword:
+    post:
+      summary: 根据关键词搜索新闻
+      tags:
+        - 新闻管理
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                keyword:
+                  type: string
+                page:
+                  type: integer
+                num:
+                  type: integer
+      responses:
+        '200':
+          description: 搜索成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /news:
+    get:
+      summary: 根据id查询新闻
+      tags:
+        - 新闻管理
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /news/recommend:
+    get:
+      summary: 推荐新闻
+      tags:
+        - 新闻管理
+      parameters:
+        - name: lunchTime
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: num
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 文件上传相关接口
+  /upload/photo:
+    post:
+      summary: 上传图片
+      tags:
+        - 文件管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photoFile:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /upload/cover:
+    post:
+      summary: 上传封面
+      tags:
+        - 文件管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photoFile:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /upload/classify-cover:
+    post:
+      summary: 上传分类封面
+      tags:
+        - 文件管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photoFile:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /upload/carousel-photo:
+    post:
+      summary: 上传轮播图片
+      tags:
+        - 文件管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                photoFile:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /upload/video:
+    post:
+      summary: 上传视频
+      tags:
+        - 文件管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                videoFile:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /upload/audio:
+    post:
+      summary: 上传音频
+      tags:
+        - 文件管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                audioFile:
+                  type: string
+                  format: binary
+      responses:
+        '200':
+          description: 上传成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 分类管理相关接口
+  /tang-org/admin/classify/section/add:
+    post:
+      summary: 添加版块
+      tags:
+        - 分类管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleClassification'
+      responses:
+        '200':
+          description: 添加成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/classify/project/add:
+    post:
+      summary: 添加项目
+      tags:
+        - 分类管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleClassification'
+      responses:
+        '200':
+          description: 添加成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/classify/period/add:
+    post:
+      summary: 添加时期
+      tags:
+        - 分类管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleClassification'
+      responses:
+        '200':
+          description: 添加成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/classify/update:
+    post:
+      summary: 更新分类
+      tags:
+        - 分类管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleClassification'
+      responses:
+        '200':
+          description: 更新成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/classify/delete:
+    post:
+      summary: 删除分类
+      tags:
+        - 分类管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: 删除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/classify/view:
+    get:
+      summary: 获取某个分类
+      tags:
+        - 分类管理
+      parameters:
+        - name: id
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/classify/section/all:
+    get:
+      summary: 获取所有版块
+      tags:
+        - 分类管理
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/classify/project:
+    get:
+      summary: 获取某个版块下的项目
+      tags:
+        - 分类管理
+      parameters:
+        - name: upperId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/classify/tag/period:
+    get:
+      summary: 获取所有时间段
+      tags:
+        - 分类管理
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/classify/all:
+    get:
+      summary: 获取所有分类及以下文章
+      tags:
+        - 分类管理
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 首页相关接口
+  /home-page/carousel/top/photo:
+    get:
+      summary: 获取首页顶部轮播海报图片
+      tags:
+        - 首页管理
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /home-page/carousel/top/achieve:
+    get:
+      summary: 获取顶部轮播历史成就
+      tags:
+        - 首页管理
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /home-page/carousel/news:
+    get:
+      summary: 获取中间轮播新闻
+      tags:
+        - 首页管理
+      parameters:
+        - name: num
+          in: query
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 管理员相关接口
+  /tang-org/admin/home-page/carousel-photo/add:
+    post:
+      summary: 添加轮播图片
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+                last:
+                  type: integer
+      responses:
+        '200':
+          description: 添加成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/home-page/carousel-photo/delete:
+    post:
+      summary: 删除轮播图片
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id:
+                  type: integer
+      responses:
+        '200':
+          description: 删除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/article/delete:
+    post:
+      summary: 标记删除文章
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleSimpleData'
+      responses:
+        '200':
+          description: 删除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/classify/change:
+    post:
+      summary: 更改文章分类和标签
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ArticleSimpleData'
+      responses:
+        '200':
+          description: 更改成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/member/all:
+    post:
+      summary: 返回人员列表
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PageData'
+      responses:
+        '200':
+          description: 获取成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/member/search:
+    post:
+      summary: 查询人员
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UserSearchData'
+      responses:
+        '200':
+          description: 查询成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/member/delete:
+    post:
+      summary: 删除(封禁)人员
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uid:
+                  type: integer
+      responses:
+        '200':
+          description: 删除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  /tang-org/admin/member/set:
+    post:
+      summary: 更改人员身份
+      tags:
+        - 管理员功能
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                uid:
+                  type: integer
+                authority:
+                  type: integer
+      responses:
+        '200':
+          description: 设置成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+  # 服务器管理相关接口
+  /admin/file/remove:
+    post:
+      summary: 移除存储在服务器上的无效文件资源
+      tags:
+        - 服务器管理
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                date:
+                  type: string
+                  format: date
+      responses:
+        '200':
+          description: 移除成功
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Response'
+
+components:
+  schemas:
+    Response:
+      type: object
+      properties:
+        code:
+          type: integer
+          description: 响应码
+        message:
+          type: string
+          description: 响应消息
+        data:
+          type: object
+          description: 响应数据
+          nullable: true
+
+    SDULoginData:
+      type: object
+      properties:
+        sid:
+          type: string
+          description: 学号
+        password:
+          type: string
+          description: 密码
+
+    User:
+      type: object
+      properties:
+        uid:
+          type: integer
+          description: 用户ID
+        sid:
+          type: string
+          description: 学号
+        avatar:
+          type: integer
+          description: 头像ID
+        realName:
+          type: string
+          description: 真实姓名
+        orgName:
+          $ref: '#/components/schemas/OrganizationEnum'
+        gender:
+          $ref: '#/components/schemas/Gender'
+        qqAccount:
+          type: string
+          description: QQ账号
+        phoneAccount:
+          type: string
+          description: 手机号码
+        depart:
+          type: string
+          description: 院系
+        major:
+          type: string
+          description: 专业
+        authority:
+          type: integer
+          description: 权限等级
+        registerDate:
+          type: string
+          format: date-time
+          description: 注册日期
+
+    OrganizationEnum:
+      type: string
+      enum:
+        - None
+        - Tang
+        - OTHER
+
+    Gender:
+      type: string
+      enum:
+        - UNKNOWN
+        - MALE
+        - FEMALE
+
+    PageData:
+      type: object
+      properties:
+        num:
+          type: integer
+        page:
+          type: integer
+        offset:
+          type: integer
+        totalNum:
+          type: integer
+
+    ArticlePostDataActivityInfo:
+      type: object
+      properties:
+        article:
+          $ref: '#/components/schemas/ActivityInfo'
+        fileQuote:
+          type: array
+          items:
+            type: integer
+
+    ActivityInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+        articleId:
+          type: integer
+        projectId:
+          type: integer
+        registerStartTime:
+          type: string
+          format: date-time
+        registerEndTime:
+          type: string
+          format: date-time
+        status:
+          type: integer
+        title:
+          type: string
+        cover:
+          type: integer
+        introduction:
+          type: string
+        content:
+          type: string
+        launchTime:
+          type: string
+          format: date-time
+        postUid:
+          type: integer
+        type:
+          $ref: '#/components/schemas/ArticleTypeEnum'
+
+    ActivitySearchData:
+      type: object
+      properties:
+        articleType:
+          $ref: '#/components/schemas/ArticleTypeEnum'
+        pageData:
+          $ref: '#/components/schemas/PageData'
+        launchTime:
+          type: boolean
+        positiveOrder:
+          type: boolean
+        postUid:
+          type: integer
+        projectId:
+          type: integer
+        period:
+          type: array
+          items:
+            type: integer
+        searchText:
+          type: string
+        preTime:
+          type: string
+        afterTime:
+          type: string
+
+    ArticlePostDataAchievement:
+      type: object
+      properties:
+        article:
+          $ref: '#/components/schemas/Achievement'
+        fileQuote:
+          type: array
+          items:
+            type: integer
+
+    Achievement:
+      type: object
+      properties:
+        id:
+          type: integer
+        projectId:
+          type: integer
+        periodId:
+          type: integer
+        articleId:
+          type: integer
+        status:
+          type: integer
+        title:
+          type: string
+        cover:
+          type: integer
+        introduction:
+          type: string
+        content:
+          type: string
+        launchTime:
+          type: string
+          format: date-time
+        postUid:
+          type: integer
+        type:
+          $ref: '#/components/schemas/ArticleTypeEnum'
+
+    AchieveSearchData:
+      type: object
+      properties:
+        articleType:
+          $ref: '#/components/schemas/ArticleTypeEnum'
+        pageData:
+          $ref: '#/components/schemas/PageData'
+        launchTime:
+          type: boolean
+        positiveOrder:
+          type: boolean
+        postUid:
+          type: integer
+        projectId:
+          type: integer
+        period:
+          type: array
+          items:
+            type: integer
+        searchText:
+          type: string
+        preTime:
+          type: string
+        afterTime:
+          type: string
+        status:
+          type: integer
+
+    ArticlePostDataNews:
+      type: object
+      properties:
+        article:
+          $ref: '#/components/schemas/News'
+        fileQuote:
+          type: array
+          items:
+            type: integer
+
+    News:
+      type: object
+      properties:
+        id:
+          type: integer
+        articleId:
+          type: integer
+        status:
+          type: integer
+        title:
+          type: string
+        cover:
+          type: integer
+        introduction:
+          type: string
+        content:
+          type: string
+        launchTime:
+          type: string
+          format: date-time
+        postUid:
+          type: integer
+        type:
+          $ref: '#/components/schemas/ArticleTypeEnum'
+
+    ArticleClassification:
+      type: object
+      properties:
+        id:
+          type: integer
+        classifyName:
+          type: string
+        classifyIntroduction:
+          type: string
+        classifyCover:
+          type: integer
+        classifyType:
+          $ref: '#/components/schemas/ClassifyTypeEnum'
+        articleNum:
+          type: integer
+        classifyRank:
+          type: integer
+        upperClassify:
+          type: integer
+
+    ClassifyTypeEnum:
+      type: string
+      enum:
+        - ARTICLE
+        - SECTION
+        - PROJECT
+        - PERIOD
+        - TOPIC
+        - OTHER
+
+    ArticleSimpleData:
+      type: object
+      properties:
+        id:
+          type: integer
+        type:
+          $ref: '#/components/schemas/ArticleTypeEnum'
+
+    UserSearchData:
+      type: object
+      properties:
+        pageData:
+          $ref: '#/components/schemas/PageData'
+        searchText:
+          type: string
+        org:
+          $ref: '#/components/schemas/OrganizationEnum'
+
+    ArticleTypeEnum:
+      type: string
+      enum:
+        - ACHIEVEMENT
+        - ACTIVITY
+        - TRAIN
+        - NEWS
+
+    ArticlePageData:
+      type: object
+      properties:
+        num:
+          type: integer
+        page:
+          type: integer
+        offset:
+          type: integer
+        totalNum:
+          type: integer
+        sectionId:
+          type: integer
+        projectId:
+          type: integer
+        period:
+          type: array
+          items:
+            type: integer
+        project:
+          type: array
+          items:
+            type: integer
+        articleTypeEnum:
+          $ref: '#/components/schemas/ArticleTypeEnum'
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+tags:
+  - name: 用户管理
+    description: 用户相关的API接口
+  - name: 活动管理
+    description: 活动相关的API接口
+  - name: 历史成就管理
+    description: 历史成就相关的API接口
+  - name: 新闻管理
+    description: 新闻相关的API接口
+  - name: 文件管理
+    description: 文件上传相关的API接口
+  - name: 分类管理
+    description: 分类管理相关的API接口
+  - name: 首页管理
+    description: 首页相关的API接口
+  - name: 管理员功能
+    description: 管理员相关的API接口
+  - name: 服务器管理
+    description: 服务器管理相关的API接口
