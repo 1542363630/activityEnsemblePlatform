@@ -5,7 +5,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 import welfare.system.model.dto.ArticlePostData;
 import welfare.system.model.dto.search.ActivitySearchData;
-import welfare.system.model.dto.search.UserSearchData;
 import welfare.system.model.po.ActivityInfo;
 import welfare.system.model.po.User;
 import welfare.system.model.vo.Response;

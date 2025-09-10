@@ -27,9 +27,14 @@ public class UserService {
     //统一认证登入
     public Response login(SDULoginData sduLogin) {
         if (!sduLogin.checkSid()) return Response.failure(400,"错误的学号格式");
-//        if (!sduLogin.checkPassword()) return Response.failure(400,"请正确填写密码");
+        //        if (!sduLogin.checkPassword()) return Response.failure(400,"请正确填写密码");
+        
+        //没有统一认证
+        User user = MAPPER.user.getUserBySid(sduLogin.getSid());
 
-        User user = sduLogin.login();
+        //有统一认证
+        //User user = sduLogin.login();
+
         if (user == null) {
             return Response.failure(400,"学号或密码错误");
         }
