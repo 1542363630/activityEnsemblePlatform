@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="welfare.system.mapper.AchievementMapper">
+
+    <!-- 发布历史成就 -->
+    <select id="uploadAchievement">
+        INSERT INTO `achievement`(`article_id`, `project_id`, `period_id`, `status`)
+        VALUES (#{articleId}, #{projectId}, #{periodId}, #{status});
+
+        SELECT LAST_INSERT_ID();
+    </select>
+
+    <!-- 由 project 和 period 联表查询 achievement(article) -->
+    <select id="getAchievementsByProjectAndPeriod">
+        SELECT A.`id`,
+            B.`title`,
+            B.`introduction`,
+            B.`launch_time` AS launchTime,
+            C.`file_name` AS coverURL
+        FROM `achievement` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE A.`project_id` = #{projectId}
+            AND `period_id` IN
+            <foreach item="id" collection="period" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+            AND A.status != 2
+        ORDER BY B.`launch_time` DESC
+        LIMIT #{offset}, #{num}
+    </select>
+
+    <!-- 由 projects 和 period 联表查询 achievement(article) -->
+    <select id="getAchievementsByProjectsAndPeriod">
+        SELECT A.`id`,
+        B.`title`,
+        B.`introduction`,
+        B.`launch_time` AS launchTime,
+        C.`file_name` AS coverURL
+        FROM `achievement` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE A.`project_id` IN
+        <foreach item="id" collection="project" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND `period_id` IN
+        <foreach item="id" collection="period" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND A.status != 2
+        ORDER BY B.`launch_time` DESC
+        LIMIT #{offset}, #{num}
+    </select>
+
+    <!-- 由 project 联表查询 achievement(article) -->
+    <select id="getAchievementsByProject">
+        SELECT A.`id`,
+            B.`title`,
+            B.`introduction`,
+            B.`launch_time` AS launchTime,
+            C.`file_name` AS coverURL
+        FROM `achievement` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE A.`project_id` = #{projectId}
+        AND A.status != 2
+        ORDER BY B.`launch_time` DESC
+        LIMIT #{offset}, #{num}
+    </select>
+
+    <!-- 由 period 联表查询 achievement(article) -->
+    <select id="getAchievementsByPeriod">
+        SELECT A.`id`,
+               B.`title`,
+               B.`introduction`,
+               B.`launch_time` AS launchTime,
+               C.`file_name` AS coverURL
+        FROM `achievement` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE A.`period_id` IN
+                <foreach item="id" collection="period" open="(" separator="," close=")">
+                #{id}
+                </foreach>
+            AND A.status != 2
+        ORDER BY B.`launch_time` DESC
+            LIMIT #{offset}, #{num}
+    </select>
+
+    <!-- 由 projects 联表查询 achievement(article) -->
+    <select id="getAchievementsByProjects">
+        SELECT A.`id`,
+        B.`title`,
+        B.`introduction`,
+        B.`launch_time` AS launchTime,
+        C.`file_name` AS coverURL
+        FROM `achievement` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE A.`project_id` IN
+        <foreach item="id" collection="project" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+        AND A.status != 2
+        ORDER BY B.`launch_time` DESC
+        LIMIT #{offset}, #{num}
+    </select>
+
+    <!-- 联表查询所有 achievement(article) -->
+    <select id="getAchievements">
+        SELECT A.`id`,
+        B.`title`,
+        B.`introduction`,
+        B.`launch_time` AS launchTime,
+        C.`file_name` AS coverURL
+        FROM `achievement` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE A.status != 2
+        ORDER BY B.`launch_time` DESC
+        LIMIT #{offset}, #{num}
+    </select>
+
+    <!-- 通过 id 查找 achievement -->
+    <select id="selectById">
+        SELECT A.`id`,B.`title`,B.`cover`,B.`introduction`,B.`content`,B.`launch_time`,B.`post_uid`,A.`period_id`,A.`project_id`
+        FROM `achievement` A
+        JOIN `article` B
+        ON A.`article_id` = B.`id`
+        WHERE A.`id`=#{id} AND A.`status`!=2;
+    </select>
+
+    <!-- 根据 project 和 period 获取未删除 Achievement 的数量 -->
+    <select id="getAchieveNum">
+        SELECT COUNT(*)
+        FROM `achievement`
+        WHERE 1=1
+        <if test="projectId != -1">
+            AND `project_id` = #{projectId}
+        </if>
+        <if test="period != null &amp;&amp; period.length > 0 &amp;&amp; !(period.length == 1 &amp;&amp; period[0] == -1)">
+            AND `period_id` IN
+            <foreach item="id" collection="period" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        AND `status`!=2
+    </select>
+
+    <!-- 根据 project(list) 和 period 获取未删除 Achievement 的数量 -->
+    <select id="getAchieveNumByProjects">
+        SELECT COUNT(*)
+        FROM `achievement`
+        WHERE `project_id` IN
+            <foreach item="id" collection="project" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        <if test="period != null &amp;&amp; period.length > 0 &amp;&amp; !(period.length == 1 &amp;&amp; period[0] == -1)">
+            AND `period_id` IN
+            <foreach item="id" collection="period" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        AND `status`!=2
+    </select>
+
+    <delete id="removeAchieveById">
+        DELETE FROM `achievement` WHERE `id`= #{id};
+    </delete>
+
+    <select id="getTopAchievements">
+        SELECT A.`id`,
+            B.`title`,
+            B.`introduction`,
+            B.`launch_time`,
+            C.`file_name` AS coverURL
+        FROM `achievement` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE A.`status` = 1
+        ORDER BY B.`launch_time` ASC
+    </select>
+
+    <!-- 展示成就 -->
+    <update id = "displayAchievement">
+        UPDATE `achievement`
+        SET `status` = 1
+        WHERE `id` IN
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+    <!-- 不展示成就 -->
+    <update id = "nonDisplayAchievement">
+        UPDATE `achievement`
+        SET `status` = 0
+        WHERE `id` IN
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

@@ -1,0 +1,55 @@
+spring:
+  mvc:
+    pathmatch:
+      matching-strategy: ant_path_matcher
+
+  jackson:
+    date-format: yyyy-MM-dd HH:mm:ss
+    time-zone: GMT+8
+
+  datasource:
+    hikari:
+      maximum-pool-size: 60
+      connection-timeout: 60000
+      idle-timeout: 60000
+      validation-timeout: 3000
+      max-lifetime: 600000
+      login-timeout: 5
+      minimum-idle: 10
+    driver-class-name: com.mysql.cj.jdbc.Driver
+    url: jdbc:mysql://47.113.194.64:3306/welfare_data?useUnicode=true&characterEncoding=utf-8&useSSL=true&jdbcCompliantTruncation=false&allowMultiQueries=true
+    username: welfare_user
+    password: y+7pm-8bh!CO*sW?R>-6
+
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+
+mybatis-plus:
+  configuration:
+    map-underscore-to-camel-case: true
+  mapper-locations: classpath:mapper/*.xml
+
+path:
+  web-path: http://127.0.0.1:8080
+#  web-path: http://47.113.194.64:8080
+
+  default-avatar-name: default-avatar.png
+  default-photo-name: default-photo.png
+
+  image-web-path: /image/
+  image-local-path: D:/resource/welfare/img/
+#  image-local-path: /home/resource/welfare/img/
+
+  video-web-path: /video/
+  video-local-path: D:/resource/welfare/video/
+#  video-local-path: /home/resource/welfare/video/
+
+  audio-web-path: /audio/
+  audio-local-path: D:/resource/welfare/audio/
+#  audio-local-path: /home/resource/welfare/audio/
+
+
+server:
+  port: 8080

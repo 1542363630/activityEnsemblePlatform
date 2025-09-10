@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="welfare.system.mapper.TrainResourceMapper">
+
+    <select id="selectById">
+        SELECT A.`project_id`,
+               A.`period_id`,
+               A.`id`,
+               B.`content`,
+               B.`post_uid`,
+               B.`cover`,
+               B.`title`,
+               B.`introduction`,
+               B.`launch_time`
+        FROM `train_resource` A
+        JOIN `article` B ON A.`article_id` = B.`id`
+        WHERE A.`id` = #{id}
+          AND A.status = 0
+        ORDER BY B.`launch_time` DESC
+    </select>
+
+    <!-- 由 section 、 project 和 period 联表分页查询 train_resource(article) -->
+    <select id="getTrainByProjectAndPeriod">
+        SELECT A.`id`,
+               B.`title`,
+               B.`introduction`,
+               B.`launch_time` AS launchTime,
+               C.`file_name` AS coverURL
+        FROM `train_resource` A
+                 JOIN `article` B ON A.`article_id` = B.`id`
+                 LEFT JOIN `file_resource` C ON B.`cover` = C.`id`
+        WHERE 1=1
+        <if test="projectId != -1 &amp;&amp; projectId != null">
+            AND A.`project_id` = #{projectId}
+        </if>
+        <!-- 没有 project 就查 section -->
+        <if test="!(projectId != -1 &amp;&amp; projectId != null) &amp;&amp; project != null">
+            AND A.`project_id` IN
+            <foreach item="id" collection="project" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        <if test="period != null &amp;&amp; period.length > 0 &amp;&amp; !(period.length == 1 &amp;&amp; period[0] == -1)">
+            AND `period_id` IN
+            <foreach item="id" collection="period" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+          AND A.status = 0
+        ORDER BY B.`launch_time` DESC
+            LIMIT #{offset}, #{num}
+    </select>
+
+    <!-- 根据 project 和 period 获取未删除 train_resource 的数量 -->
+    <select id="getTrainNum">
+        SELECT COUNT(*)
+        FROM `train_resource`
+        WHERE 1=1
+        <if test="projectId != -1">
+            AND `project_id` = #{projectId}
+        </if>
+        <if test="period != null &amp;&amp; period.length > 0 &amp;&amp; !(period.length == 1 &amp;&amp; period[0] == -1)">
+            AND `period_id` IN
+            <foreach item="id" collection="period" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        AND `status` = 0
+    </select>
+
+    <!-- 根据 project(list) 和 period 获取未删除 train_resource 的数量 -->
+    <select id="getTrainNumByProjects">
+        SELECT COUNT(*)
+        FROM `train_resource`
+        WHERE `project_id` IN
+            <foreach item="id" collection="project" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        <if test="period != null &amp;&amp; period.length > 0 &amp;&amp; !(period.length == 1 &amp;&amp; period[0] == -1)">
+            AND `period_id` IN
+            <foreach item="id" collection="period" open="(" separator="," close=")">
+                #{id}
+            </foreach>
+        </if>
+        AND `status` = 0
+    </select>
+
+</mapper>
