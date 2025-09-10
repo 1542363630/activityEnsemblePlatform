@@ -33,6 +33,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "`activity_date`," +
                 "`quota`," +
                 "`register_num`, " +
+                "`student_organize_name`," +
                 "`contact_way`" +
             ") " +
             "VALUES(" +
@@ -42,6 +43,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "#{activityDate}," +
                 "#{quota}," +
                 "#{registerNum}," +
+                "#{studentOrganizeName}," +
                 "#{contactWay}" +
             ");" +
             "SELECT LAST_INSERT_ID();"

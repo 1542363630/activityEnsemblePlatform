@@ -224,7 +224,7 @@ public class ActivityService {
             //获取报名状态
             Integer registerStatus = MAPPER.activity.getRegisterStatus(uid,id);
             Map<String,Object> returnMap = activityInfo.toReturnMap();
-            //如果已报名则返回联系方式
+            //如果已报名则返回联系方式 //ToDo:返回QRcode
             if (registerStatus!= null && registerStatus == 0) {
                 returnMap.put("contactWay",activityInfo.getContactWay());
             }

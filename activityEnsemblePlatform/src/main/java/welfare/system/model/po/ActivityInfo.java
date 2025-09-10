@@ -21,6 +21,7 @@ public class ActivityInfo extends Activity {
     private Integer quota = 1;
     private Integer registerNum = 0;
     private String contactWay;
+    private String studentOrganizeName;  
 
     @Override
     public String check() {
@@ -47,6 +48,7 @@ public class ActivityInfo extends Activity {
         returnMap.put("activityDate",activityDate);
         returnMap.put("quota",quota);
         returnMap.put("registerNum",registerNum);
+        returnMap.put("studentOrganizeName",studentOrganizeName);
         return returnMap;
     }
 }
