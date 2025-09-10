@@ -20,23 +20,20 @@ public class ActivityInfo extends Activity {
     private String activityDate;
     private Integer quota = 1;
     private Integer registerNum = 0;
-    private String contactWay;
-    private String studentOrganizeName;  
+    private Integer contactImageId; // 联系方式图片ID
+    private String studentOrganizeName;
 
     @Override
     public String check() {
         if (activityAddress == null) return "请填写活动地址!";
         if (activityDate == null) return "请填写活动日期!";
-        if (contactWay == null || contactWay.isBlank()) return "请填写联系方式!";
-        String htmlCheckResult = HtmlHandleUtil.checkHTML(contactWay, HtmlHandleUtil.HTML_TYPE.CONTACT_WAY);
-        if (htmlCheckResult != null) return htmlCheckResult;
+        if (contactImageId == null) return "请上传联系方式图片!";
         return super.check();
     }
 
     @Override
     public void setContentAsText() {
         super.setContentAsText();
-        HtmlHandleUtil.escapeFromHTML(contactWay);
     }
 
     //禁止用于循环内部!
@@ -48,6 +45,7 @@ public class ActivityInfo extends Activity {
         returnMap.put("activityDate",activityDate);
         returnMap.put("quota",quota);
         returnMap.put("registerNum",registerNum);
+        returnMap.put("contactImageId",contactImageId);
         returnMap.put("studentOrganizeName",studentOrganizeName);
         return returnMap;
     }

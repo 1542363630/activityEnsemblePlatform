@@ -226,7 +226,7 @@ public class ActivityService {
             Map<String,Object> returnMap = activityInfo.toReturnMap();
             //如果已报名则返回联系方式 //ToDo:返回QRcode
             if (registerStatus!= null && registerStatus == 0) {
-                returnMap.put("contactWay",activityInfo.getContactWay());
+                returnMap.put("contactImageId",activityInfo.getContactImageId());
             }
             return Response.success(returnMap);
         }catch (RuntimeException e){
@@ -264,7 +264,7 @@ public class ActivityService {
                 //报名成功
                 MAPPER.activity.registerActivity(uid, id);
                 activityInfo.setContentAsHTML();
-                return Response.success(activityInfo.getContactWay());
+                return Response.success(activityInfo.getContactImageId());
             }
 
             //status为0，表明已报名过
