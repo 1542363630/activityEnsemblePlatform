@@ -45,17 +45,6 @@ public class ActivitySearchData {
             }
         }
 
-        if(projectId != null && projectId != -1) {
-            if(first){
-                sql.append(" WHERE ");
-                first = false;
-            }
-            else {
-                sql.append("AND ");
-            }
-
-            sql.append("`activity`.`project_id` = ").append(projectId).append(" ");
-        }
 
         //排序
         sql.append("ORDER BY ")
