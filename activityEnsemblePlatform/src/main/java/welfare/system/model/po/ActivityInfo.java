@@ -28,6 +28,10 @@ public class ActivityInfo extends Activity {
         if (activityAddress == null) return "请填写活动地址!";
         if (activityDate == null) return "请填写活动日期!";
         if (contactImageId == null) return "请上传联系方式图片!";
+        // 验证contactImageId是否有效
+        if (welfare.system.model.CONSTANT.MAPPER.file.getFileById(contactImageId) == null) {
+            return "联系方式图片无效!";
+        }
         return super.check();
     }
 
