@@ -5,6 +5,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import welfare.system.model.dto.SDULoginData;
+import welfare.system.model.dto.SduVerifyRequest;
 import welfare.system.model.po.User;
 import welfare.system.model.vo.Response;
 import welfare.system.service.UserService;
@@ -19,12 +20,26 @@ public class UserController {
     UserService userService;
 
     /*
+    * SDU 爬虫两步登录：1) 提交学号/密码 -> 返回是否发送验证码以及临时 token
+    * 2) 提交验证码和 token -> 返回用户信息
+    * */
+    @PostMapping("/login/start")
+    public Response sduLoginStart(@RequestBody SDULoginData req) {
+        return userService.sduLoginStart(req);
+    }
+
+    @PostMapping("/login/verify")
+    public Response sduLoginVerify(@RequestBody SduVerifyRequest req) {
+        return userService.sduLoginVerify(req);
+    }
+
+    /*
     * 统一认证登入
     * */
-    @PostMapping("/login")
-    public Response login(@RequestBody SDULoginData sduLoginData) {
-        return userService.login(sduLoginData);
-    }
+    // @PostMapping("/login")
+    // public Response login(@RequestBody SDULoginData sduLoginData) {
+    //     return userService.login(sduLoginData);
+    // }
 
     /*
     * 获取个人信息

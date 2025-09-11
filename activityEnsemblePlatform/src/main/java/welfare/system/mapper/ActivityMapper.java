@@ -223,5 +223,4 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     @Delete("DELETE FROM `activity` WHERE `id`=#{id}")
     void removeActivityById(int id);
 
-
 }

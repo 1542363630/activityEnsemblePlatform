@@ -85,6 +85,27 @@
 			<version>13.0</version>
 		</dependency>
 
+		<dependency>
+			<groupId>com.google.guava</groupId>
+			<artifactId>guava</artifactId>
+			<version>33.4.8-jre</version>
+		</dependency>
+
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+
+		<dependency>
+
+			<groupId>org.apache.httpcomponents.client5</groupId>
+
+			<artifactId>httpclient5</artifactId>
+
+			<version>5.2.1</version>
+
+		</dependency>
+
     </dependencies>
 
 

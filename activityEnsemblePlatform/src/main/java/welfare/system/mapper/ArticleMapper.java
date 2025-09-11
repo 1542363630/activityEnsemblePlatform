@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import welfare.system.model.dto.result.ArticleSimpleData;
+import welfare.system.model.po.Activity;
 import welfare.system.model.po.Article;
 
 import java.util.List;
@@ -50,5 +51,9 @@ public interface ArticleMapper extends BaseMapper<Article> {
             "ORDER BY `type` ASC,`launch_time` DESC"
     )
     List<ArticleSimpleData> getAllArticleSimpleData();
+
+    //验证某个人是否能删除某个文章
+    @Select("SELECT * FROM `activity` WHERE `id`=#{id} AND `post_uid`=#{postUid}")
+    Article checkActivityByIdAndPostUid(Integer id, Integer postUid);
 
 }

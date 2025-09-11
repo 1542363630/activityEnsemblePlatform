@@ -55,7 +55,7 @@ public class AdminController {
     * */
     @PostMapping("/article/delete")
     public Response deleteArticle(@RequestBody ArticleSimpleData article) {
-        return articleService.deleteArticle(article.getId(),article.getType());
+        return articleService.deleteArticle(article.getId(),article.getType(),article.getPostUid());
     }
 
     /*
@@ -94,7 +94,7 @@ public class AdminController {
 
     /*
      * 更改人员身份
-     * 由于暂时没有多社团，此处简单化处理
+     * 无多社团的设定，此处简单化
      * 有多社团后，此处需要更改
      * */
     @PostMapping("/member/set")

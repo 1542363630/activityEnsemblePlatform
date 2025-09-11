@@ -23,6 +23,7 @@ public class ArticleSimpleData {
     Integer periodId;
     String classifyName;  // 标签名(时间段)
     String classifyIntroduction;  // 简介(标签颜色)
+    Integer postUid;  // 发布用户id
 
     public Map<String,Object> toReturnMap() {
         Map<String,Object> returnMap = new HashMap<>();

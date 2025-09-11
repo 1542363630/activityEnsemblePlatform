@@ -4,14 +4,17 @@ import org.springframework.stereotype.Service;
 import welfare.system.model.CONSTANT.MAPPER;
 import welfare.system.model.ENUM.ArticleTypeEnum;
 import welfare.system.model.dto.result.ArticleSimpleData;
+import welfare.system.model.po.Article;
 import welfare.system.model.vo.Response;
 
 @Service
 public class ArticleService {
 
     // 根据id和type更改文章
-    public Response deleteArticle(Integer id, ArticleTypeEnum type) {
+    public Response deleteArticle(Integer id, ArticleTypeEnum type, Integer postUid) {
         try {
+            Article article = MAPPER.article.checkActivityByIdAndPostUid(id, postUid);
+            if (article == null) throw new RuntimeException("No authority for this article");
             switch (type) {
                 case ACHIEVEMENT -> MAPPER.achieve.deleteAchieveById(id);
                 case NEWS -> MAPPER.news.deleteNewsById(id);

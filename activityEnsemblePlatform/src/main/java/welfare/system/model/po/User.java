@@ -40,7 +40,7 @@ public class User {
     * 0: 被删除(封禁)
     * 1: 普通学生
     * 2: 学生组织管理员
-    * 3: 超级管理员
+    * 3: 平台管理员
     * */
     private int authority = 1;
     private Date registerDate;
@@ -102,6 +102,29 @@ public class User {
     @JsonIgnore
     public boolean isSuperAdmin() {
         return authority == 3;
+    }
+
+    // 根据对接系统返回的 userInfo 字段构建 User
+    public static User fromExternalInfo(Map<String, String> userInfo) {
+        if (userInfo == null) return null;
+        User u = new User();
+        String sidVal = userInfo.getOrDefault("ID_NUMBER", userInfo.getOrDefault("casId", userInfo.get("sid")));
+        String nameVal = userInfo.getOrDefault("USER_NAME", userInfo.getOrDefault("name", null));
+        String genderVal = userInfo.getOrDefault("USER_SEX", userInfo.getOrDefault("gender", "UNKNOWN"));
+        String departVal = userInfo.getOrDefault("UNIT_NAME", userInfo.getOrDefault("depart", null));
+        String majorVal = userInfo.getOrDefault("major", null);
+
+        u.setSid(sidVal);
+        u.setRealName(nameVal);
+        Gender g = switch (genderVal.toUpperCase()) {
+            case "MALE", "男" -> Gender.MALE;
+            case "FEMALE", "女" -> Gender.FEMALE;
+            default -> Gender.UNKNOWN;
+        };
+        u.setGender(g);
+        u.setDepart(departVal);
+        u.setMajor(majorVal);
+        return u;
     }
 
 }
