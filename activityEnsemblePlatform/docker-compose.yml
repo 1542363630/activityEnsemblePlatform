@@ -1,0 +1,53 @@
+version: '3.8'
+
+services:
+  backend:
+    image: welfare-app:latest
+    container_name: welfare-backend
+    # ports:
+    #   - "1542:8080" # 后端端口不再需要直接暴露给主机，由 Nginx 在内部网络中访问
+    depends_on:
+      - db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:mysql://47.113.194.64:3306/welfare_data?useUnicode=true&characterEncoding=utf-8&useSSL=true&jdbcCompliantTruncation=false&allowMultiQueries=true
+      - SPRING_DATASOURCE_USERNAME=welfare_user
+      - SPRING_DATASOURCE_PASSWORD=y+7pm-8bh!CO*sW?R>-6
+    networks:
+      - welfare-net
+
+  db:
+    image: mysql:8.0
+    container_name: welfare-mysql
+    restart: always
+    environment:
+      MYSQL_DATABASE: welfare_data
+      MYSQL_USER: welfare_user
+      MYSQL_PASSWORD: y+7pm-8bh!CO*sW?R>-6
+      MYSQL_ROOT_PASSWORD: your_strong_root_password # 请务必修改为强密码
+    ports:
+      - "1543:3306" # 保留你的自定义端口，方便从主机直接连接数据库
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - welfare-net
+
+  nginx:
+    image: nginx:latest
+    container_name: welfare-nginx
+    ports:
+      - "1542:80"   # 将服务器的 80 端口映射到 Nginx 容器的 80 端口
+      - "1544:443" # 为未来的 HTTPS 预留 443 端口
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro # 将本地的 nginx.conf 文件挂载到容器内 (ro = read-only)
+      - ./frontend:/usr/share/nginx/html:ro   # 将本地的 frontend 文件夹挂载到 Nginx 的网站根目录
+    depends_on:
+      - backend
+    networks:
+      - welfare-net
+
+networks:
+  welfare-net:
+    driver: bridge
+
+volumes:
+  mysql-data:
