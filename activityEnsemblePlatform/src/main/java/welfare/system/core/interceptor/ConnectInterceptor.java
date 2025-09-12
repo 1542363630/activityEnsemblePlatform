@@ -23,7 +23,8 @@ public class ConnectInterceptor implements HandlerInterceptor {
 
     //对任意游客开放的接口
     private static final String[] FOR_TOURIST = {
-            "/user/login",
+            "/user/login/start",
+            "/user/login/verify",
             "/home-page",
             "/news"
     };

@@ -27,7 +27,7 @@ public class Main {
         /* 这一步可以在后端完成，但考虑到用户隐私（统一认证密码）不应该上传到服务器，建议将这一步放在前端 */
         /* 这里登入的是山东大学数据中心 */
         SduLogin sduLogin = new SduLogin(sdu_uid, sdu_password);
-        String ticket = sduLogin.login(ServicedeskLogin.GATE_WAY);  // 通过爬虫获取统一认证跳转ticket
+        String ticket = sduLogin.login(ServicedeskLogin.GATE_WAY,"");  // 通过爬虫获取统一认证跳转ticket
 
         // ---第三步--- //
 
@@ -51,7 +51,7 @@ public class Main {
 
         /* 现在登入本科生院获取信息 */
         System.out.println();
-        ticket = sduLogin.login(BkzhjxLogin.GATE_WAY);
+        ticket = sduLogin.login(BkzhjxLogin.GATE_WAY,"");
         cookie = BkzhjxLogin.fetchBkzhjxCookie(ticket);
         userInfo = BkzhjxLogin.getUserInfo(cookie);
         System.out.println("学号：" + userInfo.get("casId"));

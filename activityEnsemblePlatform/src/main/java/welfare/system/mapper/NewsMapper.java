@@ -21,7 +21,7 @@ public interface NewsMapper extends BaseMapper<News> {
     News getNewsById(int id);
 
     //获取所有未删除新闻条数
-    @Select("SELECT COUNT(*) FROM `news` WHERE `status`=1 OR `status`=2")
+    @Select("SELECT COUNT(*) FROM `news` WHERE `status`=1 OR `status`=0")
     Integer numberOfAllNews();
 
     //获取所有未删除新闻（分页查询）

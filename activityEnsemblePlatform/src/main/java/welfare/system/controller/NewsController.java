@@ -17,7 +17,7 @@ public class NewsController {
     @Resource
     NewsService newsService;
 
-    @PostMapping("/tang-org/admin/post/news")
+    @PostMapping("/admin/post/news")
     public Response postNews(HttpServletRequest request, @RequestBody ArticlePostData<News> news){
         return newsService.postNews(((User) request.getAttribute("user")).getUid(),news);
     }
