@@ -17,21 +17,9 @@ spring:
       login-timeout: 5
       minimum-idle: 10
     driver-class-name: com.mysql.cj.jdbc.Driver
-<<<<<<< HEAD
-    # url: jdbc:mysql://47.113.194.64:3306/welfare_data?useUnicode=true&characterEncoding=utf-8&useSSL=true&jdbcCompliantTruncation=false&allowMultiQueries=true
-    # username: welfare_user
-    # password: y+7pm-8bh!CO*sW?R>-6
-    # url: jdbc:mysql://mysql2.sqlpub.com:3307/activity_platform?serverTimezone=Asia/Shanghai&useSSL=false
-    # username: sdu_root
-    # password: sFyWdSa1VLDhMaod
-    url: jdbc:mysql://47.113.194.64:3306/welfare_data?useUnicode=true&characterEncoding=utf-8&useSSL=true&jdbcCompliantTruncation=false&allowMultiQueries=true
-    username: welfare_user
-    password: y+7pm-8bh!CO*sW?R>-6
-=======
     url: jdbc:mysql://mysql2.sqlpub.com:3307/activity_platform?useUnicode=true&characterEncoding=utf-8&useSSL=true&jdbcCompliantTruncation=false&allowMultiQueries=true
     username: sdu_root
     password: sFyWdSa1VLDhMaod
->>>>>>> parent of 48b4f05 (UPDATE)
 
   servlet:
     multipart:
