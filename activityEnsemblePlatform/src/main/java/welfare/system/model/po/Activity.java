@@ -33,7 +33,7 @@ public class Activity extends Article {
     public String check() {
         if (registerStartTime == null) registerStartTime = new Date();
         if (registerEndTime == null) return "请设定报名截止时间!";
-        if (projectId == null) projectId = 1;
+        if (projectId == null) return "需要指定活动所在项目!";
         if (!checkClassification()) return "请检查项目!";
         return super.check();
     }
