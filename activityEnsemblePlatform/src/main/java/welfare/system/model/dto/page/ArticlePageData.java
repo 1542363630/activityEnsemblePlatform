@@ -36,11 +36,15 @@ public class ArticlePageData extends PageData {
         if (checkProject() || !(checkProject() || checkProjects())) {
             if (articleTypeEnum == ArticleTypeEnum.ACHIEVEMENT) {
                 totalNum += MAPPER.achieve.getAchieveNum(projectId, period);
+            } else if (articleTypeEnum == ArticleTypeEnum.TRAIN) {
+                totalNum += MAPPER.train.getTrainNum(projectId, period);
             }
         }
         else {
             if (articleTypeEnum == ArticleTypeEnum.ACHIEVEMENT) {
                 totalNum += MAPPER.achieve.getAchieveNumByProjects(project, period);
+            } else if (articleTypeEnum == ArticleTypeEnum.TRAIN) {
+                totalNum += MAPPER.train.getTrainNumByProjects(project, period);
             }
         }
         return totalNum;

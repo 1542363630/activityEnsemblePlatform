@@ -14,6 +14,7 @@ public enum OrganizationEnum {
     None,
     Tang((short) 1,
         new String[] {
+                "/tang-org/train-resource",
                 "/user/tang-org"
         },
         new String[] {

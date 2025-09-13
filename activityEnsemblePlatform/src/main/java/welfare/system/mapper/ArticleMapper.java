@@ -37,6 +37,7 @@ public interface ArticleMapper extends BaseMapper<Article> {
 
             "SELECT B.`id`,A.`title`,A.`type`,B.`project_id`,B.`period_id`,C.`classify_name`,C.`classify_introduction`,A.`launch_time` " +
             "FROM `article` A " +
+            "JOIN `train_resource` B ON A.`id`=B.`article_id` " +
             "LEFT JOIN `article_classification` C ON B.`period_id`=C.`id` " +
             "WHERE B.`status`=0 " +
 

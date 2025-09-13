@@ -18,6 +18,7 @@ public class MAPPER implements InitializingBean {
         news = newsMapper;
         achieve = achievementMapper;
         activity = activityMapper;
+        train = trainResourceMapper;
     }
 
     @Autowired
@@ -48,5 +49,8 @@ public class MAPPER implements InitializingBean {
     protected ActivityMapper activityMapper;
     public static ActivityMapper activity;
 
+    @Autowired
+    protected TrainResourceMapper trainResourceMapper;
+    public static TrainResourceMapper train;
 
 }

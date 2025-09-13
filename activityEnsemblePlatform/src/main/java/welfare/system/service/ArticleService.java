@@ -18,8 +18,8 @@ public class ArticleService {
             switch (type) {
                 case ACHIEVEMENT -> MAPPER.achieve.deleteAchieveById(id);
                 case NEWS -> MAPPER.news.deleteNewsById(id);
+                case TRAIN -> MAPPER.train.deleteTrainResourceById(id);
                 case ACTIVITY -> MAPPER.activity.deleteActivityById(id);
-                default -> throw new RuntimeException("Unsupported article type: " + type);
             }
         }catch (RuntimeException e) {
             System.out.println(e.getMessage());
@@ -34,8 +34,8 @@ public class ArticleService {
             if(switch (articleSimpleData.getType()) {
                 case ACHIEVEMENT -> MAPPER.classify.updateAchievement(articleSimpleData);
                 case ACTIVITY -> MAPPER.classify.updateActivity(articleSimpleData);
+                case TRAIN -> MAPPER.classify.updateTrainResource(articleSimpleData);
                 case NEWS -> false;
-                default -> false;
             }) return Response.ok();
             return Response.failure(400,"无效的文章!");
         }

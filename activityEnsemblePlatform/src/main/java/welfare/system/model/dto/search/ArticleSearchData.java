@@ -30,6 +30,9 @@ public class ArticleSearchData {
         if (articleType == ArticleTypeEnum.ACHIEVEMENT) {
             sql.append(" FROM `achievement` A JOIN `article` B ON A.`article_id` = B.`id` WHERE A.`status` != 2 ");
         }
+        else if (articleType == ArticleTypeEnum.TRAIN) {
+            sql.append(" From `train_resource` A JOIN `article` B ON A.`article_id` = B.`id` WHERE A.`status` != 1 ");
+        }
         // 搜索
         if (postUid != null) {
             sql.append("AND B.`post_uid`=").append(postUid).append(" ");
