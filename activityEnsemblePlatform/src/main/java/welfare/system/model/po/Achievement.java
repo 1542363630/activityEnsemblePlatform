@@ -21,27 +21,27 @@ public class Achievement extends Article {
     private Integer id;
 
     private Integer articleId;
-    private Integer projectId;  // 项目id
-    private Integer periodId;  // 时间段id
+    // private Integer projectId;  // 项目id
+    // private Integer periodId;  // 时间段id
     private int status = 0;  // 0无 1展示 2删除
 
-    public String check() {
-        if (!checkClassification()) return "请检查项目id和时间线id!";
-        return super.check();
-    }
+    // public String check() {
+    //     if (!checkClassification()) return "请检查项目id和时间线id!";
+    //     return super.check();
+    // }
 
-    public boolean checkClassification() {
-        return MAPPER.classify.checkClassifyType(periodId, ClassifyTypeEnum.PERIOD)
-                && MAPPER.classify.checkClassifyType(projectId,ClassifyTypeEnum.PROJECT);
-    }
+    // public boolean checkClassification() {
+    //     return MAPPER.classify.checkClassifyType(periodId, ClassifyTypeEnum.PERIOD)
+    //             && MAPPER.classify.checkClassifyType(projectId,ClassifyTypeEnum.PROJECT);
+    // }
 
-    public Map<String, Object> toReturnMap() {
-        Map<String,Object> returnMap = super.toReturnMap();
-        returnMap.put("id", id);
-        returnMap.put("period", periodId == null ? null:MAPPER.classify.getClassifyById(periodId).toReturnMap());
-        returnMap.put("project", projectId == null ? null:MAPPER.classify.getClassifyById(projectId).toReturnMap());
-        return returnMap;
-    }
+    // public Map<String, Object> toReturnMap() {
+    //     Map<String,Object> returnMap = super.toReturnMap();
+    //     returnMap.put("id", id);
+    //     returnMap.put("period", periodId == null ? null:MAPPER.classify.getClassifyById(periodId).toReturnMap());
+    //     returnMap.put("project", projectId == null ? null:MAPPER.classify.getClassifyById(projectId).toReturnMap());
+    //     return returnMap;
+    // }
 
     public void setArticleType(ArticleTypeEnum articleType) {
         super.setTypeEnum(articleType);

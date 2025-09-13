@@ -77,103 +77,118 @@ public class AchievementService {
     }
 
     // 通过 板块——项目——时间线 分页查询历史成就
-    public Response queryBySectionAndProjectAndPeriod(ArticlePageData articlePageData){
+    // public Response queryBySectionAndProjectAndPeriod(ArticlePageData articlePageData){
+    //     try {
+    //         articlePageData.setArticleTypeEnum(ArticleTypeEnum.ACHIEVEMENT);
+    //         if (articlePageData.getPage() <= 0) return Response.failure(401, "查询页数只能为正");
+
+    //         // 没有 project 就查 section，获取 projectId 列表
+    //         if (!articlePageData.checkProject() && articlePageData.checkSection()) {
+    //             List<Integer> projectIdList = MAPPER.classify.getIdListByUpperClassify(articlePageData.getSectionId(), ClassifyTypeEnum.PROJECT);
+    //             articlePageData.setProject(projectIdList.toArray(Integer[]::new));
+    //         }
+
+    //         // 获取总数据量
+    //         int totalNum = articlePageData.calculateTotalNum();
+    //         int totalPage = articlePageData.calculateTotalPage();
+    //         if (articlePageData.getTotalNum() == 0) {
+    //             return Response.failure(CommonErr.NO_DATA);
+    //         }
+    //         if (articlePageData.getPage() > totalPage) {
+    //             return Response.failure(404, "页数过大!总页数：" + totalPage);
+    //         }
+
+    //         // 计算跳过的数据条数
+    //         articlePageData.calculateOffset();
+
+    //         // 获取成就信息(真的麻烦qwq)
+    //         List<Map<String, String>> achieveList;
+    //         if (articlePageData.checkPeriod() && articlePageData.checkProject()) {
+    //             achieveList = MAPPER.achieve.getAchievementsByProjectAndPeriod(articlePageData);
+    //         }
+    //         else if (!articlePageData.checkProject() && articlePageData.checkPeriod()){
+    //             if (articlePageData.checkProjects()) {
+    //                 achieveList = MAPPER.achieve.getAchievementsByProjectsAndPeriod(articlePageData);
+    //             }
+    //             else {
+    //                 achieveList = MAPPER.achieve.getAchievementsByPeriod(articlePageData);
+    //             }
+    //         }
+    //         else if (!articlePageData.checkPeriod() && articlePageData.checkProject()) {
+    //             achieveList = MAPPER.achieve.getAchievementsByProject(articlePageData);
+    //         }
+    //         else if (articlePageData.checkProjects()) {
+    //             achieveList = MAPPER.achieve.getAchievementsByProjects(articlePageData);
+    //         }
+    //         else {
+    //             achieveList = MAPPER.achieve.getAchievements(articlePageData);
+    //         }
+
+    //         // 获取时间线信息
+    //         List<ClassificationResultData> periodList = MAPPER.classify.getClassifyListByType(ClassifyTypeEnum.PERIOD);
+    //         //将查询结果转换为指定的Map
+    //         List<Map<String,Object>> periodResultList = new ArrayList<>();
+    //         for (ClassificationResultData i : periodList) {
+    //             periodResultList.add(i.toReturnMap());
+    //         }
+    //         // 最后加上 cover 的URL
+    //         for(Map<String,String> m : achieveList) {
+    //             m.put("coverURL", VALUE.web_path + VALUE.img_web + m.get("coverURL"));
+    //         }
+
+    //         // 将搜索结果和总页数封装返回
+    //         return Response.success(new PageResultData<>(totalPage, totalNum, achieveList, periodResultList));
+    //     } catch (RuntimeException e) {
+    //         System.out.println(e.getMessage());
+    //         System.out.println(e.getMessage());
+    //         throw new RuntimeException("查询失败");
+    //     }
+    // }
+
+    public Response searchAchieve(int page,int pageSize){
         try {
-            articlePageData.setArticleTypeEnum(ArticleTypeEnum.ACHIEVEMENT);
-            if (articlePageData.getPage() <= 0) return Response.failure(401, "查询页数只能为正");
-
-            // 没有 project 就查 section，获取 projectId 列表
-            if (!articlePageData.checkProject() && articlePageData.checkSection()) {
-                List<Integer> projectIdList = MAPPER.classify.getIdListByUpperClassify(articlePageData.getSectionId(), ClassifyTypeEnum.PROJECT);
-                articlePageData.setProject(projectIdList.toArray(Integer[]::new));
-            }
-
-            // 获取总数据量
-            int totalNum = articlePageData.calculateTotalNum();
-            int totalPage = articlePageData.calculateTotalPage();
-            if (articlePageData.getTotalNum() == 0) {
-                return Response.failure(CommonErr.NO_DATA);
-            }
-            if (articlePageData.getPage() > totalPage) {
-                return Response.failure(404, "页数过大!总页数：" + totalPage);
-            }
-
-            // 计算跳过的数据条数
-            articlePageData.calculateOffset();
-
-            // 获取成就信息(真的麻烦qwq)
-            List<Map<String, String>> achieveList;
-            if (articlePageData.checkPeriod() && articlePageData.checkProject()) {
-                achieveList = MAPPER.achieve.getAchievementsByProjectAndPeriod(articlePageData);
-            }
-            else if (!articlePageData.checkProject() && articlePageData.checkPeriod()){
-                if (articlePageData.checkProjects()) {
-                    achieveList = MAPPER.achieve.getAchievementsByProjectsAndPeriod(articlePageData);
-                }
-                else {
-                    achieveList = MAPPER.achieve.getAchievementsByPeriod(articlePageData);
-                }
-            }
-            else if (!articlePageData.checkPeriod() && articlePageData.checkProject()) {
-                achieveList = MAPPER.achieve.getAchievementsByProject(articlePageData);
-            }
-            else if (articlePageData.checkProjects()) {
-                achieveList = MAPPER.achieve.getAchievementsByProjects(articlePageData);
-            }
-            else {
-                achieveList = MAPPER.achieve.getAchievements(articlePageData);
-            }
-
-            // 获取时间线信息
-            List<ClassificationResultData> periodList = MAPPER.classify.getClassifyListByType(ClassifyTypeEnum.PERIOD);
-            //将查询结果转换为指定的Map
-            List<Map<String,Object>> periodResultList = new ArrayList<>();
-            for (ClassificationResultData i : periodList) {
-                periodResultList.add(i.toReturnMap());
-            }
-            // 最后加上 cover 的URL
-            for(Map<String,String> m : achieveList) {
-                m.put("coverURL", VALUE.web_path + VALUE.img_web + m.get("coverURL"));
-            }
-
-            // 将搜索结果和总页数封装返回
-            return Response.success(new PageResultData<>(totalPage, totalNum, achieveList, periodResultList));
-        } catch (RuntimeException e) {
-            System.out.println(e.getMessage());
-            System.out.println(e.getMessage());
-            throw new RuntimeException("查询失败");
-        }
-    }
-
-    public Response searchAchieve(AchieveSearchData achieveSearchData){
-        try {
-            PageData pageData = achieveSearchData.getPageData();
-            String searchSql = achieveSearchData.getSearchSql();
+            // PageData pageData = achieveSearchData.getPageData();
+            // String searchSql = achieveSearchData.getSearchSql();
 
 //            System.out.println(searchSql);
-            int totalNum = MAPPER.achieve.getAchieveSearchNum(searchSql);
-            if (totalNum == 0) {
-                return Response.failure(CommonErr.NO_DATA);
-            } else {
-                pageData.setTotalNum(totalNum);
+            if(page<=0) return Response.failure(404,"页数只能为正");
+            //得到总页数
+            int totalNum = MAPPER.achieve.numberOfAllAchievements();
+            int maxPage = (int) Math.ceil((double) totalNum / pageSize);
+
+            if(page>maxPage){
+                return Response.failure(404,"页数超过最大页数。最大页数：" + maxPage);
             }
 
-            int totalPage = pageData.calculateTotalPage();
-            if (pageData.getPage() > totalPage) {
-                return Response.failure(404, "页数过大!总页数：" + totalPage);
+            //得到指定页
+            List<Map<String,Object>> newsList = MAPPER.achieve.selectAchievementsByPage(pageSize,(page -1)* pageSize);
+            for (Map<String,Object> m : newsList) {
+                m.put("coverURL",VALUE.web_path + VALUE.img_web + m.get("coverURL"));
             }
 
-            pageData.calculateOffset();
-            PageResultData<Map<String, Object>> pageResultData = new PageResultData<>(
-                    totalPage,
-                    totalNum,
-                    MAPPER.achieve.searchAchieve(searchSql, pageData.getOffset(), pageData.getNum())
-                            .stream()
-                            .map(Achievement::toReturnMap)
-                            .toList(),
-                    null
-            );
-            return Response.success(pageResultData.toReturnMapExceptClassificationList());
+            return Response.success(new PageResultData<>(maxPage,totalNum,newsList).toReturnMapExceptClassificationList());
+            // if (totalNum == 0) {
+            //     return Response.failure(CommonErr.NO_DATA);
+            // } else {
+            //     pageData.setTotalNum(totalNum);
+            // }
+
+            // int totalPage = pageData.calculateTotalPage();
+            // if (pageData.getPage() > totalPage) {
+            //     return Response.failure(404, "页数过大!总页数：" + totalPage);
+            // }
+
+            // pageData.calculateOffset();
+            // PageResultData<Map<String, Object>> pageResultData = new PageResultData<>(
+            //         totalPage,
+            //         totalNum,
+            //         MAPPER.achieve.searchAchieve(searchSql, pageData.getOffset(), pageData.getNum())
+            //                 .stream()
+            //                 .map(Achievement::toReturnMap)
+            //                 .toList(),
+            //         null
+            // );
+            // return Response.success(pageResultData.toReturnMapExceptClassificationList());
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
             return Response.failure(400, "查找失败");

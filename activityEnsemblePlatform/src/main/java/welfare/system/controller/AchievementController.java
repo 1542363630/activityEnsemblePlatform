@@ -38,17 +38,17 @@ public class AchievementController {
     /*
      * 根据 “项目——时间线” 分页获取未删除历史成就
      * */
-    @PostMapping("/achieve/project-period")
-    public Response queryBySectionAndProjectAndPeriod(@RequestBody ArticlePageData articlePageData){
-        return achievementService.queryBySectionAndProjectAndPeriod(articlePageData);
-    }
+    // @PostMapping("/achieve/project-period")
+    // public Response queryBySectionAndProjectAndPeriod(@RequestBody ArticlePageData articlePageData){
+    //     return achievementService.queryBySectionAndProjectAndPeriod(articlePageData);
+    // }
 
     /*
      * 查询成就
      * */
     @PostMapping("/achieve/search")
-    public Response searchAchieve(@RequestBody AchieveSearchData achieveSearchData) {
-        return achievementService.searchAchieve(achieveSearchData);
+    public Response searchAchieve(@RequestBody Map<String,Integer> pageData) {
+        return achievementService.searchAchieve(pageData.get("page"),pageData.get("num"));
     }
 
     // 更改 status = 1

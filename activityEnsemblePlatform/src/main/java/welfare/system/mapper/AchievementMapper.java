@@ -76,4 +76,23 @@ public interface AchievementMapper extends BaseMapper<Achievement> {
     @Select("SELECT * ${searchSql} LIMIT #{offset},#{num}")
     List<Achievement> searchAchieve(String searchSql, int offset, int num);
 
+    @Select("SELECT COUNT(*) FROM `achievement` WHERE `status`=1 OR `status`=0")
+    Integer numberOfAllAchievements();
+
+        //获取所有未删除成就（分页查询）
+        @Select("SELECT " +
+        "A.`id`," +
+        "B.`title`," +
+        "B.`introduction`," +
+        "B.`launch_time`," +
+        "C.`file_name` AS coverURL " +
+    "FROM `achievement` A " +
+    "JOIN `article` B ON A.`article_id`=B.`id` " +
+    "LEFT JOIN `file_resource` C ON B.`cover`=C.`id` " +
+    "WHERE A.`status`<>2 " +
+    "ORDER BY B.`launch_time` DESC " +
+    "LIMIT #{pageSize} OFFSET #{offset}"
+)
+List<Map<String,Object>> selectAchievementsByPage(Integer pageSize,Integer offset);
+
 }

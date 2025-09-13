@@ -5,8 +5,8 @@
 
     <!-- 发布历史成就 -->
     <select id="uploadAchievement">
-        INSERT INTO `achievement`(`article_id`, `project_id`, `period_id`, `status`)
-        VALUES (#{articleId}, #{projectId}, #{periodId}, #{status});
+        INSERT INTO `achievement`(`article_id`,  `status`)
+        VALUES (#{articleId},  #{status});
 
         SELECT LAST_INSERT_ID();
     </select>
