@@ -211,4 +211,8 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     @Delete("DELETE FROM `activity` WHERE `id`=#{id}")
     void removeActivityById(int id);
 
+        //根据id清除活动记录
+    @Delete("DELETE FROM `activity_register` WHERE `activity_id`=#{activity_id} AND `uid`=#{uid}")
+    void removeActivityRegister(int activity_id, int uid);
+
 }

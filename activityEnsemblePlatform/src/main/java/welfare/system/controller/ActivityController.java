@@ -72,6 +72,10 @@ public class ActivityController {
         return activityService.registerActivity(((User) request.getAttribute("user")).getUid(), id.get("activityId"));
     }
 
-
+        //申请取消注册活动
+        @PostMapping("/activity/cancel")
+        public Response cancelActivity(HttpServletRequest request,@RequestBody Map<String,Integer> id){
+            return activityService.cancelActivity(((User) request.getAttribute("user")).getUid(), id.get("activityId"));
+        }
 
 }
