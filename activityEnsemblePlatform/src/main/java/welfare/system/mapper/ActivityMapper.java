@@ -14,14 +14,12 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     //发布活动
     @Select("INSERT INTO `activity`(" +
                 "`article_id`," +
-                "`project_id`," +
                 "`register_start_time`," +
                 "`register_end_time`," +
                 "status" +
             ") " +
             "VALUES(" +
                 "#{articleId}," +
-                "#{projectId}," +
                 "#{registerStartTime}," +
                 "#{registerEndTime}," +
                 "#{status} " +
@@ -33,7 +31,6 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "`activity_date`," +
                 "`quota`," +
                 "`register_num`, " +
-                "`student_organize_name`," +
                 "`contact_way`" +
             ") " +
             "VALUES(" +
@@ -43,7 +40,6 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "#{activityDate}," +
                 "#{quota}," +
                 "#{registerNum}," +
-                "#{studentOrganizeName}," +
                 "#{contactWay}" +
             ");" +
             "SELECT LAST_INSERT_ID();"
@@ -58,14 +54,12 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "C.`introduction`," +
                 "B.`register_end_time`<CURRENT_DATE AS ongoing," +
                 "E.`activity_address`," +
-                "E.`activity_date`," +
-                "F.`classify_name` " +
+                "E.`activity_date` " +
             "FROM `activity_register` A " +
             "JOIN `activity` B ON B.`id`=A.`activity_id` " +
             "JOIN `article` C ON C.`id`=B.`article_id` " +
             "JOIN `file_resource` D ON D.`id`=C.`cover` " +
             "JOIN `activity_info` E ON E.`id`=B.`id` " +
-            "JOIN `article_classification` F ON F.`id`=B.`project_id` " +
             "WHERE A.`status`=0 AND A.`uid`=#{uid} AND B.`status`=0 "+
             "ORDER BY `register_time` DESC " +
             "LIMIT #{pageSize} OFFSET #{offset}"
@@ -90,12 +84,9 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "C.`title`," +
                 "D.`file_name` AS coverURL," +
                 "C.`introduction`," +
-                "B.`classify_name` AS projectName," +
-                "A.`project_id` AS projectId," +
                 "E.`activity_address`," +
                 "E.`activity_date` " +
             "FROM `activity` AS A " +
-            "JOIN `article_classification` B ON B.`id`=A.`project_id` " +
             "JOIN `article` C ON A.`article_id`=C.`id` " +
             "LEFT JOIN `file_resource` D ON C.`cover`=D.`id` " +
             "JOIN `activity_info` E ON E.`id`=A.`id` " +
@@ -193,12 +184,9 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "`article`.`title`," +
                 "`file_resource`.`file_name` AS coverURL," +
                 "`article`.`introduction`," +
-                "`article_classification`.`classify_name` AS projectName," +
-                "`activity`.`project_id` AS projectId," +
                 "`activity_info`.`activity_address`," +
                 "`activity_info`.`activity_date` " +
             "FROM `activity` " +
-            "JOIN `article_classification` ON `article_classification`.`id`= `activity`.`project_id` " +
             "JOIN `article` ON `activity`.`article_id`=`article`.`id` " +
             "LEFT JOIN `file_resource` ON `article`.`cover`=`file_resource`.`id` " +
             "JOIN `activity_info` ON `activity_info`.`id`=`activity`.`id` " +

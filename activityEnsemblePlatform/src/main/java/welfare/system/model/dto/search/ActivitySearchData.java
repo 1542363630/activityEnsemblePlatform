@@ -17,7 +17,7 @@ public class ActivitySearchData {
     private boolean positiveOrder = false;  //false:DESC  true:ASC
     private String keyword = null;//null or "": 不按关键字搜索
     private Boolean ongoing = null;//null: 不按进行状态搜索
-    private Integer projectId = null;//null or -1: 不按类别搜索
+    // private Integer projectId = null;//null or -1: 不按类别搜索
 
     public String getSearchSql() {
         StringBuilder sql = new StringBuilder();
@@ -45,17 +45,17 @@ public class ActivitySearchData {
             }
         }
 
-        if(projectId != null && projectId != -1) {
-            if(first){
-                sql.append(" WHERE ");
-                first = false;
-            }
-            else {
-                sql.append("AND ");
-            }
+        // if(projectId != null && projectId != -1) {
+        //     if(first){
+        //         sql.append(" WHERE ");
+        //         first = false;
+        //     }
+        //     else {
+        //         sql.append("AND ");
+        //     }
 
-            sql.append("`activity`.`project_id` = ").append(projectId).append(" ");
-        }
+        //     sql.append("`activity`.`project_id` = ").append(projectId).append(" ");
+        // }
 
         //排序
         sql.append("ORDER BY ")

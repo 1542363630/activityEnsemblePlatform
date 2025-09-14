@@ -18,32 +18,32 @@ public class ActivityController {
     ActivityService activityService;
 
     //发布活动
-    @PostMapping("/tang-org/admin/post/activity")
+    @PostMapping("/admin/post/activity")
     public Response postActivity(HttpServletRequest request, @RequestBody ArticlePostData<ActivityInfo> activityInfo){
         return activityService.postActivity(request,activityInfo);
     }
 
 
     //获取个人活动列表(分页)
-    @PostMapping("/user/tang-org/activity")
+    @PostMapping("/user/activity")
     public Response selectActivityByUserId(HttpServletRequest request, @RequestBody Map<String,Integer> pageData){
         return activityService.selectActivityByUserId(((User) request.getAttribute("user")).getUid(),pageData.get("page"),pageData.get("num"));
     }
 
     //获取活动预览内容
-    @GetMapping("/tang-org/activity/preview")
+    @GetMapping("/activity/preview")
     public Response previewActivity(@RequestParam Integer num) {
         return activityService.previewActivity(num);
     }
 
-    //按版块获取活动列表(分项目)
-    @PostMapping("/tang-org/activity/view")
-    public Response selectActivityBySection(@RequestBody Map<String,Integer> sectionId) {
-        return activityService.selectActivityBySection(sectionId.get("sectionId"));
-    }
+    // //按版块获取活动列表(分项目)
+    // @PostMapping("/activity/view")
+    // public Response selectActivityBySection(@RequestBody Map<String,Integer> sectionId) {
+    //     return activityService.selectActivityBySection(sectionId.get("sectionId"));
+    // }
 
     //活动筛选（按 关键词，是否进行中，项目类型 进行筛选）
-    @PostMapping("/tang-org/activity/constrained")
+    @PostMapping("/activity/constrained")
     public Response selectActivityConstrained(@RequestBody ActivitySearchData activitySearchData){
         return activityService.selectActivityConstrained(activitySearchData);
     }
@@ -61,13 +61,13 @@ public class ActivityController {
 //    }
 
     //根据id查看活动
-    @GetMapping("/tang-org/activity")
+    @GetMapping("/activity")
     public Response selectActivityById(HttpServletRequest request,@RequestParam int activityId){
         return activityService.selectActivityById(((User) request.getAttribute("user")).getUid(),activityId);
     }
 
     //申请参加活动
-    @PostMapping("/tang-org/activity/apply")
+    @PostMapping("/activity/apply")
     public Response registerActivity(HttpServletRequest request,@RequestBody Map<String,Integer> id){
         return activityService.registerActivity(((User) request.getAttribute("user")).getUid(), id.get("activityId"));
     }

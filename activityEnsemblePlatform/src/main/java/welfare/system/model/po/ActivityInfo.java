@@ -39,7 +39,7 @@ public class ActivityInfo extends Activity {
         HtmlHandleUtil.escapeFromHTML(contactWay);
     }
 
-    //禁止用于循环内部!
+    // //禁止用于循环内部!
     public Map<String, Object> toReturnMap() {
         Map<String,Object> returnMap = super.toReturnMap();
         returnMap.put("id",id);

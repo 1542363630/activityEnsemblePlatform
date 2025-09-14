@@ -52,6 +52,8 @@ public class ActivityService {
             }
         } catch (RuntimeException e) {
             System.out.println(e.getMessage());
+
+            e.printStackTrace();
             MAPPER.article.deleteArticleById(articleId);
             return Response.failure(400,"文章上传失败了QwQ");
         }
@@ -84,7 +86,7 @@ public class ActivityService {
         }
     }
 
-    //活动筛选（按 关键词，是否进行中，项目类型 进行筛选）（分页）
+    // 活动筛选（按 关键词，是否进行中， 进行筛选）（分页）
     public Response selectActivityConstrained(ActivitySearchData activitySearchData){
         PageData pageData = activitySearchData.getPageData();
         try{
@@ -124,7 +126,9 @@ public class ActivityService {
             m.put("coverURL",VALUE.web_path + VALUE.img_web + m.get("coverURL"));
             m.put("ongoing",((Integer) m.get("ongoing")) == 0);
         }
-        return Response.success(activityList);
+        Map<String, Object> result = new HashMap<>();
+        result.put("List", activityList);
+        return Response.success(result);
     }
 
     //获取报名未结束活动列表，按板块分类

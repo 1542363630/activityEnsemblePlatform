@@ -57,7 +57,7 @@ public class Article {
         Map<String,Object> returnMap = new HashMap<>();
         returnMap.put("title",title);
         returnMap.put("coverURL", VALUE.web_path + VALUE.img_web + MAPPER.file.getFileNameById(cover));
-        returnMap.put("introduction",introduction);
+        // returnMap.put("introduction",introduction);
         //将text转义为html
         if (content != null) {
             setContentAsHTML();

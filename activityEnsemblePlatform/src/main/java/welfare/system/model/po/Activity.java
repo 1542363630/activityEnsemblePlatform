@@ -23,7 +23,7 @@ public class Activity extends Article {
     private Integer id;
 
     protected Integer articleId;
-    protected Integer projectId;
+    // protected Integer projectId;
 
     protected Date registerStartTime;
     protected Date registerEndTime;
@@ -33,22 +33,22 @@ public class Activity extends Article {
     public String check() {
         if (registerStartTime == null) registerStartTime = new Date();
         if (registerEndTime == null) return "请设定报名截止时间!";
-        if (projectId == null) return "需要指定活动所在项目!";
-        if (!checkClassification()) return "请检查项目!";
+        // if (projectId == null) return "需要指定活动所在项目!";
+        // if (!checkClassification()) return "请检查项目!";
         return super.check();
     }
 
-    public boolean checkClassification() {
-        return MAPPER.classify.checkClassifyType(projectId, ClassifyTypeEnum.PROJECT);
-    }
+    // public boolean checkClassification() {
+    //     return MAPPER.classify.checkClassifyType(projectId, ClassifyTypeEnum.PROJECT);
+    // }
 
     @Override
     public Map<String,Object> toReturnMap() {
         Map<String,Object> returnMap = super.toReturnMap();
         returnMap.put("id",id);
-        ClassificationResultData classification = MAPPER.classify.getClassifyById(projectId);
-        ClassificationService.setUpperClassification(classification);
-        returnMap.put("classification",classification.toSimpleReturnMap());
+        // ClassificationResultData classification = MAPPER.classify.getClassifyById(projectId);
+        // ClassificationService.setUpperClassification(classification);
+        // returnMap.put("classification",classification.toSimpleReturnMap());
         returnMap.put("registerStartTime",registerStartTime);
         returnMap.put("registerEndTime",registerEndTime);
         return returnMap;
