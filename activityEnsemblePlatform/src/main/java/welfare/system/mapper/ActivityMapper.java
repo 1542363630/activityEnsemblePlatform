@@ -31,6 +31,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "`activity_date`," +
                 "`quota`," +
                 "`register_num`, " +
+                "`contact_image_id`," +
                 "`contact_way`" +
             ") " +
             "VALUES(" +
@@ -40,6 +41,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "#{activityDate}," +
                 "#{quota}," +
                 "#{registerNum}," +
+                "#{contactImageId}," +
                 "#{contactWay}" +
             ");" +
             "SELECT LAST_INSERT_ID();"
@@ -54,12 +56,14 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "C.`introduction`," +
                 "B.`register_end_time`<CURRENT_DATE AS ongoing," +
                 "E.`activity_address`," +
-                "E.`activity_date` " +
+                "E.`activity_date`," +
+                "F.`file_name` AS contactImageURL " +
             "FROM `activity_register` A " +
             "JOIN `activity` B ON B.`id`=A.`activity_id` " +
             "JOIN `article` C ON C.`id`=B.`article_id` " +
             "JOIN `file_resource` D ON D.`id`=C.`cover` " +
             "JOIN `activity_info` E ON E.`id`=B.`id` " +
+            "JOIN `file_resource` F ON F.`id`=E.`contact_image_id` " +
             "WHERE A.`status`=0 AND A.`uid`=#{uid} AND B.`status`=0 "+
             "ORDER BY `register_time` DESC " +
             "LIMIT #{pageSize} OFFSET #{offset}"
@@ -198,6 +202,10 @@ public interface ActivityMapper extends BaseMapper<Activity> {
     //查看某个活动报名情况
     @Select("SELECT `status` FROM `activity_register` WHERE `uid`=#{uid} AND `activity_id`=#{id} LIMIT 1")
     Integer getRegisterStatus(int uid,int id);
+
+    // //查看某个活动的二维码图片
+    // @Select("SELECT `contact_image_id` FROM `activity_info` WHERE `activity_id`=#{id} LIMIT 1")
+    // Integer getContactImage(int id);
 
     //申请参加活动
     @Insert("INSERT INTO `activity_register`(`uid`,`activity_id`) VALUES(#{uid},#{id})")

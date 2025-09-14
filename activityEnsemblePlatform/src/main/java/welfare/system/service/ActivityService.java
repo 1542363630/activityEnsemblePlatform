@@ -79,6 +79,7 @@ public class ActivityService {
                     (page - 1) * pageSize);
             for (Map<String, Object> m : activityInfoList) {
                 m.put("coverURL", VALUE.web_path + VALUE.img_web + m.get("coverURL"));
+                m.put("contactImageURL", VALUE.web_path + VALUE.img_web + m.get("contactImageURL"));
                 m.put("ongoing", ((long) m.get("ongoing")) == 0);
             }
 
@@ -278,7 +279,11 @@ public class ActivityService {
                 // 报名成功
                 MAPPER.activity.registerActivity(uid, id);
                 activityInfo.setContentAsHTML();
-                return Response.success(activityInfo.getContactWay());
+                int contactImageId = activityInfo.getContactImageId();
+                Map<String, String> result = new HashMap<>();
+                result.put("contactWay", activityInfo.getContactWay());
+                result.put("contactImageURL", VALUE.web_path + VALUE.img_web + MAPPER.file.getFileNameById(contactImageId)); 
+                return Response.success(result);
             }
 
             // status为0，表明已报名过
