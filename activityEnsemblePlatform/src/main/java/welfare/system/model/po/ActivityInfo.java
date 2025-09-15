@@ -56,7 +56,7 @@ public class ActivityInfo extends Activity {
         returnMap.put("activityDate", activityDate);
         returnMap.put("quota", quota);
         returnMap.put("registerNum", registerNum);
-        returnMap.put("contactImageURL", VALUE.web_path + VALUE.img_web + MAPPER.file.getFileNameById(contactImageId));
+        // returnMap.put("contactImageURL", VALUE.web_path + VALUE.img_web + MAPPER.file.getFileNameById(contactImageId));
 
         return returnMap;
     }

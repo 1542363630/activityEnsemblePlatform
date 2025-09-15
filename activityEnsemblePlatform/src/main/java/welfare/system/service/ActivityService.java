@@ -238,10 +238,15 @@ public class ActivityService {
             ActivityInfo activityInfo = MAPPER.activity.selectActivityById(id);
             // 获取报名状态
             Integer registerStatus = MAPPER.activity.getRegisterStatus(uid, id);
+            int contactImageId = activityInfo.getContactImageId();
             Map<String, Object> returnMap = activityInfo.toReturnMap();
-            // 如果已报名则返回联系方式 //ToDo:返回QRcode
+            // 如果已报名则返回联系方式 
             if (registerStatus != null && registerStatus == 0) {
                 returnMap.put("contactWay", activityInfo.getContactWay());
+                returnMap.put("contactImageURL", VALUE.web_path + VALUE.img_web + MAPPER.file.getFileNameById(contactImageId));
+            } else {
+                // 如果未报名，确保不返回contactImageURL
+                returnMap.remove("contactImageURL");
             }
             return Response.success(returnMap);
         } catch (RuntimeException e) {
