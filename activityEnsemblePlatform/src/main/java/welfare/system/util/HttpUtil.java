@@ -127,6 +127,7 @@ public class HttpUtil {
     private static CloseableHttpClient initialHttpClients() {
         return HttpClients.custom()
                 .setConnectionManager(initialConnectionManager())
+                .disableCookieManagement()
                 .setRoutePlanner(new DefaultRoutePlanner(null) {  // 设置动态http代理
                     @Override
                     protected HttpHost determineProxy(HttpHost target, HttpContext context) {

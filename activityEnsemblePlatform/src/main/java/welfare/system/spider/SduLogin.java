@@ -91,6 +91,7 @@ public class SduLogin {
         casLoginCookie.put("Language", Language);
 
         // 提取页面隐藏字段
+        System.out.println (loginFormResponse.body ());
         lt = loginFormResponse.parse().select("input[name=lt]").attr("value");
     }
 
@@ -99,7 +100,7 @@ public class SduLogin {
      * 设备验证和JSESSIONID绑定，带上JSESSIONID经过设备验证后，JSESSIONID会被统一认证登入标记为已经验证过
      * 只有已经验证过的JSESSIONID才能参与登入接口
      */
-    private void deviceCheck(String code) throws URISyntaxException {
+    private int deviceCheck(String code) throws URISyntaxException {
         String u = Des.strEnc(sdu_id, "1", "2", "3");
         String p = Des.strEnc(sdu_password, "1", "2", "3");
         // 发送设备验证请求
@@ -120,22 +121,31 @@ public class SduLogin {
         Map<String,String> deviceInfo = deviceResponse.body();
         System.out.println(deviceInfo.get("info"));
 
-        switch (deviceInfo.get("info")) {
-            case "binded","pass" -> System.out.println("设备验证通过，准备登入");
+        return switch (deviceInfo.get("info")) {
+            case "binded","pass" -> {
+                System.out.println("设备验证通过，准备登入");
+                yield 0;
+            }
             case "bind" -> {
                 // System.out.println("需要设备二次验证，是否继续？(true or false)");
                 // if (!(new Scanner(System.in)).nextBoolean()) throw new RuntimeException();
-                twiceDeviceCheck(code);
+                if(code.isEmpty ())
+                    yield 1;
+                else {
+                    twiceDeviceCheck(code);
+                    yield 0;
+                }
             }
             case "validErr","notFound" -> {
                 System.out.println("密码错误或用户不存在");
-                throw new RuntimeException();
+                yield 3;
             }
             case "mobileErr" -> {
                 System.out.println("未绑定手机");
-                throw new RuntimeException();
+                yield 4;
             }
-        }
+            default -> 5;
+        };
     }
 
     /**
@@ -297,9 +307,10 @@ public class SduLogin {
             System.out.println("进入统一认证登入页面提取信息...");
             enterCasLoginPage(casLoginURL);
             System.out.println("执行设备验证...");
-            deviceCheck(code);
-            System.out.println("进行用户名密码验证...");
-            redirectUrl = passwordVerification(casLoginURL);
+            if(deviceCheck(code) ==0)
+            {System.out.println("进行用户名密码验证...");
+            redirectUrl = passwordVerification(casLoginURL);}
+            else return redirectUrl;
         }
 
         System.out.println("统一认证登入验证通过！");
