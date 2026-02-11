@@ -91,7 +91,6 @@ public class SduLogin {
         casLoginCookie.put("Language", Language);
 
         // 提取页面隐藏字段
-        System.out.println (loginFormResponse.body ());
         lt = loginFormResponse.parse().select("input[name=lt]").attr("value");
     }
 

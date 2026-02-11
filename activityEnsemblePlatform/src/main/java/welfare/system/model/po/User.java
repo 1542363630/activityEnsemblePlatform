@@ -86,7 +86,7 @@ public class User {
     }
 
     public boolean hasOrg() {
-        return orgName != OrganizationEnum.None;
+        return orgName!=null && orgName != OrganizationEnum.None;
     }
 
     @JsonIgnore

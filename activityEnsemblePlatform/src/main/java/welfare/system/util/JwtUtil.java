@@ -65,6 +65,7 @@ public class JwtUtil {
                     .get("uid")
                     .toString());
         }catch (Exception e){
+            e.printStackTrace ();
             return -1;
         }
     }

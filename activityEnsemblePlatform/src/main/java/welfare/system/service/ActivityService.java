@@ -70,7 +70,7 @@ public class ActivityService {
                 return Response.failure(404, "页数只能为正数");
             int totalNum = MAPPER.activity.selectNumberOfActivityByUid(uid);
             // 得到总页数
-            int maxPage = (int) Math.ceil((double) totalNum / pageSize);
+            int maxPage = (int) Math.ceil(((double) totalNum) / pageSize);
             if (page > maxPage) {
                 return Response.failure(404, "页数超过最大页数。最大页数：" + maxPage);
             }

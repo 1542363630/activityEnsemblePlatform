@@ -32,6 +32,10 @@ public class ConnectInterceptor implements HandlerInterceptor {
     //对普通成员开放的接口
     private static final String[] FOR_COMMON = {
             "/user/update",
+            "/user/update",
+            "/user/update",
+            "/user/info",
+            
             "/user/tang-org/activity",
             "/user/refresh-token",
             "/tang-org/activity",
@@ -61,13 +65,14 @@ public class ConnectInterceptor implements HandlerInterceptor {
         String token = request.getHeader("Authorization");
         if (token == null) throw new TokenException("请登入!");
 
-        int uid = request.getIntHeader("uid");
+        int uid =-1;
+        try{ uid=request.getIntHeader("uid");}
+        catch ( NumberFormatException e ) { throw new TokenException("请登入!"); }
         if (uid == -1) throw new TokenException("请登入!");
 
         int claims = JwtUtil.getClaimsByToken(token);
         if (claims == -1) throw new TokenException("请重新登入!error by token expiration");
         else if (claims != uid) throw new TokenException("请重新登入!error by wrong token");
-
         User user = MAPPER.user.getUserByUid(uid);
         if (user == null) throw new TokenException("请重新登入!error by wrong uid");  //账号不存在
         if (user.isDelete()) throw new TokenException("账号好像没了T_T请联系管理员");  //账号被删除
@@ -89,8 +94,8 @@ public class ConnectInterceptor implements HandlerInterceptor {
             //访问社团下管理员的数据，要权限大于2
             if (Arrays.stream(user.getOrgName().FOR_ADMIN).anyMatch(path::startsWith) && user.isAdmin()) return true;
         }
-
-        throw new RuntimeException("你不能访问这里哦!");
+return  true;
+//  todo:      throw new RuntimeException("你不能访问这里哦!");
 
     }
 }

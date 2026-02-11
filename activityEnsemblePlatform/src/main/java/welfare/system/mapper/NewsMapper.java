@@ -87,7 +87,7 @@ public interface NewsMapper extends BaseMapper<News> {
     //获取最近的新闻id列
     @Select("SELECT C.`id`,C.`title`,C.`introduction`,C.`launch_time`,D.`file_name` AS coverURL " +
             "FROM (" +
-                "SELECT B.`id`, B.`title`, B.`introduction`, B.`launch_time`, B.`cover` " +
+                "SELECT A.`id`, B.`title`, B.`introduction`, B.`launch_time`, B.`cover` " +
                 "FROM `news` A " +
                 "JOIN `article` B ON A.`article_id` = B.`id` " +
                 "WHERE A.`status` = 0 OR A.`status` = 1 " +

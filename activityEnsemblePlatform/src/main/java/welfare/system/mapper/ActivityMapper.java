@@ -61,9 +61,9 @@ public interface ActivityMapper extends BaseMapper<Activity> {
             "FROM `activity_register` A " +
             "JOIN `activity` B ON B.`id`=A.`activity_id` " +
             "JOIN `article` C ON C.`id`=B.`article_id` " +
-            "JOIN `file_resource` D ON D.`id`=C.`cover` " +
+            "LEFT  JOIN `file_resource` D ON D.`id`=C.`cover` " +
             "JOIN `activity_info` E ON E.`id`=B.`id` " +
-            "JOIN `file_resource` F ON F.`id`=E.`contact_image_id` " +
+            "LEFT  JOIN `file_resource` F ON F.`id`=E.`contact_image_id` " +
             "WHERE A.`status`=0 AND A.`uid`=#{uid} AND B.`status`=0 "+
             "ORDER BY `register_time` DESC " +
             "LIMIT #{pageSize} OFFSET #{offset}"
