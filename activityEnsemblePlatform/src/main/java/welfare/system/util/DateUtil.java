@@ -41,5 +41,16 @@ public class DateUtil {
             throw new CheckException("日期格式错误!\n格式:yyyy-MM-dd");
         }
     }
+    public static Date parseDateOrNull(String timeStr) {
+        if (timeStr == null || timeStr.trim().isEmpty()) {
+            return null;
+        }
+        
+        try {
+            return dayFormat.parse(timeStr);
+        } catch (Exception e) {
+            return null; // 解析失败直接返回 null
+        }
+    }
 
 }

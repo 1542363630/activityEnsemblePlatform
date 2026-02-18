@@ -1,5 +1,6 @@
 package welfare.system.service;
 
+import org.apache.ibatis.annotations.Param;
 import org.springframework.stereotype.Service;
 import welfare.system.model.CONSTANT.MAPPER;
 import welfare.system.model.CONSTANT.VALUE;
@@ -14,6 +15,7 @@ import welfare.system.model.dto.search.AchieveSearchData;
 import welfare.system.model.po.Achievement;
 import welfare.system.model.vo.CommonErr;
 import welfare.system.model.vo.Response;
+import welfare.system.util.DateUtil;
 import welfare.system.util.FileUtil;
 
 import java.util.*;
@@ -145,7 +147,7 @@ public class AchievementService {
     //     }
     // }
 
-    public Response searchAchieve(int page,int pageSize){
+    public Response searchAchieve(String keyword,String startTimeStr,String endTimeStr,int page,int pageSize){
         try {
             // PageData pageData = achieveSearchData.getPageData();
             // String searchSql = achieveSearchData.getSearchSql();
@@ -153,7 +155,11 @@ public class AchievementService {
 //            System.out.println(searchSql);
             if(page<=0) return Response.failure(404,"页数只能为正");
             //得到总页数
-            int totalNum = MAPPER.achieve.numberOfAllAchievements();
+            
+            Date startTime= DateUtil. parseDateOrNull(startTimeStr);
+            Date endTime= DateUtil.parseDateOrNull ( endTimeStr );
+            
+            int totalNum = MAPPER.achieve.numberOfAchievements(keyword, startTime,endTime);
             int maxPage = (int) Math.ceil((double) totalNum / pageSize);
 
             if(page>maxPage){
@@ -161,7 +167,7 @@ public class AchievementService {
             }
 
             //得到指定页
-            List<Map<String,Object>> newsList = MAPPER.achieve.selectAchievementsByPage(pageSize,(page -1)* pageSize);
+            List<Map<String,Object>> newsList = MAPPER.achieve.searchAchieve (keyword, startTime,endTime,pageSize,(page -1)* pageSize);
             for (Map<String,Object> m : newsList) {
                 m.put("coverURL",VALUE.web_path + VALUE.img_web + m.get("coverURL"));
             }

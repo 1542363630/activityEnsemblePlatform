@@ -182,7 +182,42 @@
         WHERE A.`status` = 1
         ORDER BY B.`launch_time` ASC
     </select>
+    <sql id="achievementSearchCondition">
+        FROM achievement A
+        JOIN article B ON A.article_id = B.id
+        LEFT JOIN file_resource C ON B.cover = C.id
+        WHERE A.status = 1
+        <if test="keyword != null and keyword != ''">
+            AND (
+            B.title LIKE CONCAT('%', #{keyword}, '%')
+            OR B.introduction LIKE CONCAT('%', #{keyword}, '%')
+            )
+        </if>
 
+        <if test="startTime != null">
+            AND B.launch_time <![CDATA[ >= ]]> #{startTime}
+        </if>
+
+        <if test="endTime != null">
+            AND B.launch_time <![CDATA[ <= ]]> #{endTime}
+        </if>
+    </sql>
+    <select id="searchAchieve" resultType="map">
+        SELECT
+        A.id,
+        B.title,
+        B.introduction,
+        B.launch_time,
+        C.file_name AS coverURL
+        <include refid="achievementSearchCondition"/>
+        ORDER BY B.launch_time DESC
+        LIMIT #{num} OFFSET #{offset}
+    </select>
+
+    <select id="numberOfAchievements" resultType="int">
+        SELECT COUNT(1)
+        <include refid="achievementSearchCondition"/>
+    </select>
     <!-- 展示成就 -->
     <update id = "displayAchievement">
         UPDATE `achievement`

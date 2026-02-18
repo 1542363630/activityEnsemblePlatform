@@ -2,11 +2,13 @@ package welfare.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 import org.apache.ibatis.annotations.Select;
 import org.apache.ibatis.annotations.Update;
 import welfare.system.model.dto.page.ArticlePageData;
 import welfare.system.model.po.Achievement;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -72,10 +74,23 @@ public interface AchievementMapper extends BaseMapper<Achievement> {
     @Select("SELECT COUNT(*) ${searchSql}")
     int getAchieveSearchNum(String searchSql);
 
-    // 搜索成就
-    @Select("SELECT * ${searchSql} LIMIT #{offset},#{num}")
-    List<Achievement> searchAchieve(String searchSql, int offset, int num);
-
+//    // 搜索成就
+//    @Select("SELECT * ${searchSql} LIMIT #{offset},#{num}")
+//    List<Achievement> searchAchieve(String searchSql, int offset, int num);
+    
+    
+    List<Map<String,Object>> searchAchieve(
+            @Param ("keyword") String keyword,
+            @Param("startTime") Date startTime,
+            @Param("endTime") Date endTime,
+            @Param("pageSize") Integer pageSize,
+            @Param("offset") Integer offset
+    );
+    Integer numberOfAchievements(  @Param ("keyword") String keyword,
+                                   @Param("startTime") Date startTime,
+                                   @Param("endTime") Date endTime);
+    
+    
     @Select("SELECT COUNT(*) FROM `achievement` WHERE `status`=1 OR `status`=0")
     Integer numberOfAllAchievements();
 

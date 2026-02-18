@@ -47,8 +47,8 @@ public class Achievement extends Article {
         super.setTypeEnum(articleType);
     }
 
-    @SuppressWarnings("unused")
-    public void setDisplay(boolean display) {
-        status = display ? 1 : 0;
-    }
+//    @SuppressWarnings("unused")
+//    public void setDisplay(boolean display) {
+//        status = display ? 1 : 0;
+//    }
 }

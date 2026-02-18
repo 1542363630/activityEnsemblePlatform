@@ -47,8 +47,8 @@ public class AchievementController {
      * 查询成就
      * */
     @PostMapping("/achieve/search")
-    public Response searchAchieve(@RequestBody Map<String,Integer> pageData) {
-        return achievementService.searchAchieve(pageData.get("page"),pageData.get("num"));
+    public Response searchAchieve(@RequestBody Map<String,Object> searchData) {
+        return achievementService.searchAchieve((String ) searchData.get ( "keyword" ),(String ) searchData.get ( "startTime" ),(String ) searchData.get ( "endTime" ),(Integer ) searchData.get("page"),(Integer)searchData.get("num"));
     }
 
     // 更改 status = 1
