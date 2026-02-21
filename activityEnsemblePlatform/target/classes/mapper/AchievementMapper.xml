@@ -211,7 +211,7 @@
         C.file_name AS coverURL
         <include refid="achievementSearchCondition"/>
         ORDER BY B.launch_time DESC
-        LIMIT #{num} OFFSET #{offset}
+        LIMIT #{pageSize} OFFSET #{offset}
     </select>
 
     <select id="numberOfAchievements" resultType="int">

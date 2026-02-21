@@ -196,6 +196,7 @@ public class AchievementService {
             // );
             // return Response.success(pageResultData.toReturnMapExceptClassificationList());
         } catch (RuntimeException e) {
+            e.printStackTrace ();
             System.out.println(e.getMessage());
             return Response.failure(400, "查找失败");
         }

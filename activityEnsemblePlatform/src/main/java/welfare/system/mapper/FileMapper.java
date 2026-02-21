@@ -2,6 +2,7 @@ package welfare.system.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
 import org.apache.ibatis.annotations.*;
+import org.springframework.transaction.annotation.Transactional;
 import welfare.system.model.po.FileResource;
 
 import java.util.Date;
@@ -82,11 +83,12 @@ public interface FileMapper extends BaseMapper<FileResource> {
     Integer getNextCarouselPhotoId(int id);
 
     //上传新轮播图片
-    @Insert("DELETE FROM `carousel_photo` WHERE `photo_id`=#{last};" +
+    @Transactional
+    @Insert("DELETE FROM `carousel_photo` WHERE `photo_id`=#{last} AND `next`!= #{id}; " +
             "INSERT INTO `carousel_photo`(`photo_id`,`next`) VALUES(#{last},#{id}),(#{id},#{next});"
     )
     void addCarouselPhoto(int id,int last,int next);
-
+    @Transactional
     @Delete("DELETE FROM `carousel_photo` WHERE `photo_id`=#{id};" +
             "UPDATE `carousel_photo` SET `next`=#{next} WHERE `next`=#{id};"
     )
