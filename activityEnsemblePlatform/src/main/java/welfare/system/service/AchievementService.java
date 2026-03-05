@@ -147,19 +147,22 @@ public class AchievementService {
     //     }
     // }
 
-    public Response searchAchieve(String keyword,String startTimeStr,String endTimeStr,int page,int pageSize){
+    public Response searchAchieve(Boolean showAll ,String keyword,String startTimeStr,String endTimeStr,Integer page,Integer pageSize){
         try {
             // PageData pageData = achieveSearchData.getPageData();
             // String searchSql = achieveSearchData.getSearchSql();
 
 //            System.out.println(searchSql);
+            if (pageSize ==null) pageSize=20;
+            else if(pageSize >2000) pageSize=2000;
+            if (page ==null) page=1;
             if(page<=0) return Response.failure(404,"页数只能为正");
             //得到总页数
             
             Date startTime= DateUtil. parseDateOrNull(startTimeStr);
             Date endTime= DateUtil.parseDateOrNull ( endTimeStr );
             
-            int totalNum = MAPPER.achieve.numberOfAchievements(keyword, startTime,endTime);
+            int totalNum = MAPPER.achieve.numberOfAchievements(showAll,keyword, startTime,endTime);
             int maxPage = (int) Math.ceil((double) totalNum / pageSize);
 
             if(page>maxPage){
@@ -167,7 +170,7 @@ public class AchievementService {
             }
 
             //得到指定页
-            List<Map<String,Object>> newsList = MAPPER.achieve.searchAchieve (keyword, startTime,endTime,pageSize,(page -1)* pageSize);
+            List<Map<String,Object>> newsList = MAPPER.achieve.searchAchieve (showAll,keyword, startTime,endTime,pageSize,(page -1)* pageSize);
             for (Map<String,Object> m : newsList) {
                 m.put("coverURL",VALUE.web_path + VALUE.img_web + m.get("coverURL"));
             }

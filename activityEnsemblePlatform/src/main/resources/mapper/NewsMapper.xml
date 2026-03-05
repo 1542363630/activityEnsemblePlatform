@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="welfare.system.mapper.NewsMapper">
+    <!-- 展示成就 -->
+    <update id = "updateNewsStatus">
+        UPDATE `news`
+        SET `status` = #{status}
+        WHERE `id` IN
+        <foreach item="id" collection="idList" open="(" separator="," close=")">
+            #{id}
+        </foreach>
+    </update>
+
+</mapper>

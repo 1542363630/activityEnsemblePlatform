@@ -57,7 +57,22 @@ public class NewsService {
 
         return Response.ok();
     }
-    
+    public Response updateNewsStatus(Integer[] idList, int status){
+        try {
+            MAPPER.news.updateNewsStatus (idList,status);
+            return Response.ok();
+        } catch (RuntimeException e){
+            System.out.println(e.getMessage());
+            String oper = switch ( status )
+            {
+                case 0 -> "隐藏";
+                case 1 -> "展示";
+                case 2 -> "删除";
+                default -> "未知操作";
+            };
+            return Response.failure(400, oper+"失败");
+        }
+    }
     //获取所有未删除新闻
     public Response queryAllNews(int page,int pageSize){
         try {

@@ -15,6 +15,8 @@ public interface NewsMapper extends BaseMapper<News> {
             "SELECT LAST_INSERT_ID();"
     )
     int uploadNews(News news);
+    
+    void updateNewsStatus(Integer[] idList,int status);
 
     //获取指定id的新闻
     @Select("SELECT * FROM `news` A JOIN `article` B ON A.`article_id`=B.`id` WHERE A.`id`=#{id}")
@@ -30,7 +32,8 @@ public interface NewsMapper extends BaseMapper<News> {
                 "B.`title`," +
                 "B.`introduction`," +
                 "B.`launch_time`," +
-                "C.`file_name` AS coverURL " +
+                "C.`file_name` AS coverURL ," +
+            "A.`status`"+
             "FROM `news` A " +
             "JOIN `article` B ON A.`article_id`=B.`id` " +
             "LEFT JOIN `file_resource` C ON B.`cover`=C.`id` " +

@@ -42,6 +42,10 @@ public class ConnectInterceptor implements HandlerInterceptor {
             "/tang-org/achieve",
             "/tang-org/classify"
     };
+    private static final String[] FOR_ADMIN = {
+            "/tang-org/admin",
+            "/admin"
+    };
 
     @Override
     public boolean preHandle(
@@ -94,8 +98,13 @@ public class ConnectInterceptor implements HandlerInterceptor {
             //访问社团下管理员的数据，要权限大于2
             if (Arrays.stream(user.getOrgName().FOR_ADMIN).anyMatch(path::startsWith) && user.isAdmin()) return true;
         }
-return  true;
-//  todo:      throw new RuntimeException("你不能访问这里哦!");
-
+        //普通管理员可以访问的接口
+		else if ( Arrays.stream ( FOR_ADMIN ).anyMatch ( path :: startsWith ))
+        {
+            if( user.isAdmin() ) return true;
+            else throw new TokenException("无管理员权限");
+        }
+        return  true;
+		//  todo:      throw new RuntimeException("你不能访问这里哦!");
     }
 }

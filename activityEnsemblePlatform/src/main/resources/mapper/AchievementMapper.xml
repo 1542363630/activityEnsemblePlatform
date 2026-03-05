@@ -186,7 +186,9 @@
         FROM achievement A
         JOIN article B ON A.article_id = B.id
         LEFT JOIN file_resource C ON B.cover = C.id
+        <if test="!showAll">
         WHERE A.status = 1
+        </if>
         <if test="keyword != null and keyword != ''">
             AND (
             B.title LIKE CONCAT('%', #{keyword}, '%')
@@ -208,7 +210,8 @@
         B.title,
         B.introduction,
         B.launch_time,
-        C.file_name AS coverURL
+        C.file_name AS coverURL,
+        A.status
         <include refid="achievementSearchCondition"/>
         ORDER BY B.launch_time DESC
         LIMIT #{pageSize} OFFSET #{offset}

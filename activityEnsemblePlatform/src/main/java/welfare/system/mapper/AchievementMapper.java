@@ -80,13 +80,15 @@ public interface AchievementMapper extends BaseMapper<Achievement> {
     
     
     List<Map<String,Object>> searchAchieve(
+            @Param ( "showAll" ) Boolean showAll,
             @Param ("keyword") String keyword,
             @Param("startTime") Date startTime,
             @Param("endTime") Date endTime,
             @Param("pageSize") Integer pageSize,
             @Param("offset") Integer offset
     );
-    Integer numberOfAchievements(  @Param ("keyword") String keyword,
+    Integer numberOfAchievements(@Param ( "showAll" ) Boolean showAll,
+            @Param ("keyword") String keyword,
                                    @Param("startTime") Date startTime,
                                    @Param("endTime") Date endTime);
     

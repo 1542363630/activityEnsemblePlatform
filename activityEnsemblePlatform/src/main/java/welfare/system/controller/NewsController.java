@@ -21,7 +21,18 @@ public class NewsController {
     public Response postNews(HttpServletRequest request, @RequestBody ArticlePostData<News> news){
         return newsService.postNews(((User) request.getAttribute("user")).getUid(),news);
     }
-
+    @PostMapping("/admin/news/display")
+    public Response displayNews(@RequestBody Map<String,Integer[]> idList){
+        return newsService.updateNewsStatus(idList.get ( "idList" ),1);
+    }
+    @PostMapping("/admin/news/non-display")
+    public Response nonDisplayNews(@RequestBody Map<String,Integer[]> idList){
+        return newsService.updateNewsStatus(idList.get ( "idList" ),0);
+    }
+    @PostMapping("/admin/news/cancel")
+    public Response cancelNews(@RequestBody Map<String,Integer[]> idList){
+        return newsService.updateNewsStatus(idList.get ( "idList" ),2);
+    }
     @PostMapping("/news/all")
     public Response queryAllNews(@RequestBody Map<String,Integer> pageData){
         return newsService.queryAllNews(pageData.get("page"),pageData.get("num"));

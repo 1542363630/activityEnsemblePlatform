@@ -11,11 +11,11 @@ import welfare.system.model.vo.Response;
 public class ArticleService {
 
     // 根据id和type更改文章
-    public Response deleteArticle(Integer id, ArticleTypeEnum type, Integer postUid) {
+    public Response deleteArticle(Integer id) {
         try {
-            Article article = MAPPER.article.checkActivityByIdAndPostUid(id, postUid);
+            Article article = MAPPER.article.selectById (id);
             if (article == null) throw new RuntimeException("No authority for this article");
-            switch (type) {
+            switch (article.getType ()) {
                 case ACHIEVEMENT -> MAPPER.achieve.deleteAchieveById(id);
                 case NEWS -> MAPPER.news.deleteNewsById(id);
                 case TRAIN -> MAPPER.train.deleteTrainResourceById(id);

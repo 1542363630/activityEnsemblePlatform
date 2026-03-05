@@ -55,7 +55,7 @@ public class AdminController {
     * */
     @PostMapping("/article/delete")
     public Response deleteArticle(@RequestBody ArticleSimpleData article) {
-        return articleService.deleteArticle(article.getId(),article.getType(),article.getPostUid());
+        return articleService.deleteArticle(article.getId());
     }
 
     /*

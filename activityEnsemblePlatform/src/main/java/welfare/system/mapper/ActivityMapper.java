@@ -54,6 +54,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "C.`title`," +
                 "D.`file_name` AS coverURL," +
                 "C.`introduction`," +
+                "B.`register_end_time`, " +
                 "B.`register_end_time`<CURRENT_DATE AS ongoing," +
                 "E.`activity_address`," +
                 "E.`activity_date`," +
@@ -90,6 +91,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "C.`introduction`," +
                 "E.`activity_address`," +
                 "E.`activity_date` " +
+            "C.`post_uid` AS postUid"+
             "FROM `activity` AS A " +
             "JOIN `article` C ON A.`article_id`=C.`id` " +
             "LEFT JOIN `file_resource` D ON C.`cover`=D.`id` " +

@@ -35,6 +35,7 @@ public class AchievementController {
         return achievementService.queryById(id);
     }
 
+
     /*
      * 根据 “项目——时间线” 分页获取未删除历史成就
      * */
@@ -48,7 +49,7 @@ public class AchievementController {
      * */
     @PostMapping("/achieve/search")
     public Response searchAchieve(@RequestBody Map<String,Object> searchData) {
-        return achievementService.searchAchieve((String ) searchData.get ( "keyword" ),(String ) searchData.get ( "startTime" ),(String ) searchData.get ( "endTime" ),(Integer ) searchData.get("page"),(Integer)searchData.get("num"));
+        return achievementService.searchAchieve((Boolean ) searchData.get ( "showAll" ) ,(String ) searchData.get ( "keyword" ),(String ) searchData.get ( "startTime" ),(String ) searchData.get ( "endTime" ),(Integer ) searchData.get("page"),(Integer)searchData.get("num"));
     }
 
     // 更改 status = 1
