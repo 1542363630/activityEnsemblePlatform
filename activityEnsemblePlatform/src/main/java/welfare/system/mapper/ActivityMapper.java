@@ -90,7 +90,7 @@ public interface ActivityMapper extends BaseMapper<Activity> {
                 "D.`file_name` AS coverURL," +
                 "C.`introduction`," +
                 "E.`activity_address`," +
-                "E.`activity_date` " +
+                "E.`activity_date`, " +
             "C.`post_uid` AS postUid"+
             "FROM `activity` AS A " +
             "JOIN `article` C ON A.`article_id`=C.`id` " +
